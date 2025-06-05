@@ -65,24 +65,24 @@ export default function AdminDiscounts() {
   const [editingDiscount, setEditingDiscount] = useState<Discount | null>(null);
   const [viewingDiscount, setViewingDiscount] = useState<Discount | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-
+  
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
   // Fetch discounts
   const { data: discounts = [], isLoading, error } = useQuery({
-    queryKey: [`${import.meta.env.VITE_API_URL}/api/admin/discounts`],
-    queryFn: () => apiRequest(`${import.meta.env.VITE_API_URL}/api/admin/discounts`),
+    queryKey: ['/api/admin/discounts'],
+    queryFn: () => apiRequest('/api/admin/discounts'),
   });
 
   // Create discount mutation
   const createDiscountMutation = useMutation({
-    mutationFn: (data: any) => apiRequest(`${import.meta.env.VITE_API_URL}/api/admin/discounts`, {
+    mutationFn: (data: any) => apiRequest('/api/admin/discounts', {
       method: 'POST',
       body: JSON.stringify(data),
     }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/admin/discounts`] });
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/discounts'] });
       setIsCreateModalOpen(false);
       toast({
         title: "Success",
@@ -102,12 +102,12 @@ export default function AdminDiscounts() {
   // Update discount mutation
   const updateDiscountMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: any }) =>
-      apiRequest(`${import.meta.env.VITE_API_URL}/api/admin/discounts/${id}`, {
+      apiRequest(`/api/admin/discounts/${id}`, {
         method: 'PUT',
         body: JSON.stringify(data),
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/admin/discounts`] });
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/discounts'] });
       setIsEditModalOpen(false);
       setEditingDiscount(null);
       toast({
@@ -127,11 +127,11 @@ export default function AdminDiscounts() {
 
   // Delete discount mutation
   const deleteDiscountMutation = useMutation({
-    mutationFn: (id: number) => apiRequest(`${import.meta.env.VITE_API_URL}/api/admin/discounts/${id}`, {
+    mutationFn: (id: number) => apiRequest(`/api/admin/discounts/${id}`, {
       method: 'DELETE',
     }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/admin/discounts`] });
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/discounts'] });
       toast({
         title: "Success",
         description: "Discount deleted successfully",

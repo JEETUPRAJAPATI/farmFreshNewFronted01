@@ -66,17 +66,17 @@ export default function OrderHistory() {
   const { isAuthenticated } = useAuth();
 
   const { data: orderHistory, isLoading, error } = useQuery<OrderHistoryResponse>({
-    queryKey: [`${import.meta.env.VITE_API_URL}/api/orders/history`],
+    queryKey: ['/api/orders/history'],
     enabled: isAuthenticated,
     queryFn: async () => {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/history`, {
+      const response = await fetch('/api/orders/history', {
         credentials: 'include' // Use session-based authentication
       });
-
+      
       if (!response.ok) {
         throw new Error('Failed to fetch order history');
       }
-
+      
       return response.json();
     }
   });
@@ -206,7 +206,7 @@ export default function OrderHistory() {
                   </span>
                 </div>
               </CardHeader>
-
+              
               <CardContent>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
@@ -249,14 +249,14 @@ export default function OrderHistory() {
                       </div>
                     </div>
                   </div>
-
+                  
                   <div>
                     <h4 className="font-semibold mb-2 flex items-center gap-2">
                       <MapPin className="h-4 w-4" />
                       Shipping Address
                     </h4>
                     <p className="text-sm text-gray-600">{order.shippingAddress}</p>
-
+                    
                     {order.billingAddress && order.billingAddress !== order.shippingAddress && (
                       <>
                         <h4 className="font-semibold mb-2 mt-4">Billing Address</h4>
@@ -275,8 +275,8 @@ export default function OrderHistory() {
                         {order.items.map((item) => (
                           <div key={item.id} className="flex items-center gap-4 p-3 border rounded-lg">
                             {item.product?.imageUrl && (
-                              <img
-                                src={item.product.imageUrl}
+                              <img 
+                                src={item.product.imageUrl} 
                                 alt={item.product.name}
                                 className="w-16 h-16 object-cover rounded-md"
                               />

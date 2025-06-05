@@ -15,7 +15,7 @@ export default function AdminAuthWrapper({ children }: AdminAuthWrapperProps) {
   useEffect(() => {
     const checkAuth = async () => {
       const token = localStorage.getItem('adminToken');
-
+      
       if (!token) {
         setIsAuthenticated(false);
         setIsLoading(false);
@@ -25,7 +25,7 @@ export default function AdminAuthWrapper({ children }: AdminAuthWrapperProps) {
 
       try {
         // Verify token with backend
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/dashboard`, {
+        const response = await fetch('/api/admin/dashboard', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -40,13 +40,13 @@ export default function AdminAuthWrapper({ children }: AdminAuthWrapperProps) {
         console.error('Authentication error:', error);
         localStorage.removeItem('adminToken');
         localStorage.removeItem('adminUser');
-
+        
         toast({
           title: 'Authentication Failed',
           description: 'Your session has expired. Please log in again.',
           variant: 'destructive',
         });
-
+        
         setIsAuthenticated(false);
         setLocation('/admin/login');
       } finally {

@@ -31,13 +31,13 @@ export default function AdminInventory() {
 
   // Fetch all products with React Query
   const { data: productsData, isLoading: productsLoading } = useQuery({
-    queryKey: [`${import.meta.env.VITE_API_URL}/api/admin/products`],
+    queryKey: ['/api/admin/products'],
     select: (data: any) => data.products || [],
   });
 
   // Fetch low stock products
   const { data: lowStockData, isLoading: lowStockLoading } = useQuery({
-    queryKey: [`${import.meta.env.VITE_API_URL}/api/admin/low-stock`],
+    queryKey: ['/api/admin/low-stock'],
     select: (data: any) => data.lowStockProducts || [],
   });
 
@@ -48,23 +48,23 @@ export default function AdminInventory() {
   // Update stock mutation
   const updateStockMutation = useMutation({
     mutationFn: async ({ productId, newStock }: { productId: number; newStock: number }) => {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/products/${productId}/stock`, {
+      const response = await fetch(`/api/admin/products/${productId}/stock`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ stockQuantity: newStock }),
       });
-
+      
       if (!response.ok) {
         throw new Error('Failed to update stock');
       }
-
+      
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/admin/products`] });
-      queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/admin/low-stock`] });
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/products'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/low-stock'] });
       toast({
         title: "Success",
         description: "Stock updated successfully",

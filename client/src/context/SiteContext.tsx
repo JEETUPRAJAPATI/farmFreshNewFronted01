@@ -44,8 +44,8 @@ const SiteContext = createContext<SiteContextType | undefined>(undefined);
 
 export function SiteProvider({ children }: { children: ReactNode }) {
   const { data: rawSettings = [], isLoading, refetch } = useQuery({
-    queryKey: [`${import.meta.env.VITE_API_URL}/api/site-settings`],
-    queryFn: () => apiRequest(`${import.meta.env.VITE_API_URL}/api/site-settings`),
+    queryKey: ['/api/site-settings'],
+    queryFn: () => apiRequest('/api/site-settings'),
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 

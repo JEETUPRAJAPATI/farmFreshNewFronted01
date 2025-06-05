@@ -34,22 +34,22 @@ type NewsletterFormData = z.infer<typeof newsletterSchema>;
 export default function Home() {
   // Get products and farmers data
   const { data: allProducts = [] } = useQuery<Product[]>({
-    queryKey: [`${import.meta.env.VITE_API_URL}/api/products`],
+    queryKey: ["/api/products"],
   });
-
+  
   // Filter featured products on the frontend
   const products = allProducts.filter(product => product.featured);
 
   const { data: farmers = [] } = useQuery<Farmer[]>({
-    queryKey: [`${import.meta.env.VITE_API_URL}/api/farmers/featured`],
+    queryKey: ["/api/farmers/featured"],
   });
 
   const { data: testimonials = [] } = useQuery<TestimonialType[]>({
-    queryKey: [`${import.meta.env.VITE_API_URL}/api/testimonials`],
+    queryKey: ["/api/testimonials"],
   });
 
   const { data: teamMembers = [] } = useQuery<TeamMember[]>({
-    queryKey: [`${import.meta.env.VITE_API_URL}/api/team-members`],
+    queryKey: ["/api/team-members"],
   });
 
   // Animation controller for scroll animations
@@ -87,7 +87,7 @@ export default function Home() {
 
   const onSubmit = async (data: NewsletterFormData) => {
     try {
-      await apiRequest(`${import.meta.env.VITE_API_URL}/api/newsletter/subscribe`, {
+      await apiRequest("/api/newsletter/subscribe", {
         method: "POST",
         body: JSON.stringify(data),
         headers: {

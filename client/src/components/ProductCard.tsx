@@ -18,17 +18,17 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   // Fetch product reviews to calculate rating
   const { data: reviews = [] } = useQuery({
-    queryKey: [`${import.meta.env.VITE_API_URL}/api/products/${product.id}/reviews`],
+    queryKey: [`/api/products/${product.id}/reviews`],
     enabled: !!product.id,
   });
 
   // Calculate average rating from reviews
-  const averageRating = reviews && Array.isArray(reviews) && reviews.length > 0
-    ? reviews.reduce((sum: number, review: any) => sum + review.rating, 0) / reviews.length
+  const averageRating = reviews && Array.isArray(reviews) && reviews.length > 0 
+    ? reviews.reduce((sum: number, review: any) => sum + review.rating, 0) / reviews.length 
     : 0;
 
   return (
-    <motion.div
+    <motion.div 
       whileHover={{ y: -5 }}
       transition={{ duration: 0.3 }}
     >
@@ -42,14 +42,14 @@ export default function ProductCard({ product }: ProductCardProps) {
                 </Badge>
               </div>
             )}
-            <motion.img
+            <motion.img 
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.5 }}
-              src={product.imageUrl || '/images/products/placeholder.jpg'}
+              src={product.imageUrl || '/images/products/placeholder.jpg'} 
               onError={(e) => {
                 e.currentTarget.src = '/images/products/placeholder.jpg';
               }}
-              alt={product.name}
+              alt={product.name} 
               className="w-full h-full object-cover transition-transform duration-500"
             />
           </div>
@@ -94,9 +94,9 @@ export default function ProductCard({ product }: ProductCardProps) {
 
           {/* Rating Display */}
           <div className="mb-3">
-            <RatingDisplay
-              rating={averageRating}
-              totalReviews={reviews.length}
+            <RatingDisplay 
+              rating={averageRating} 
+              totalReviews={reviews.length} 
               size="sm"
               showCount={reviews.length > 0}
             />

@@ -30,19 +30,19 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
   const [selectedRating, setSelectedRating] = useState<number>(5);
   const { toast } = useToast();
   const { user, isAuthenticated } = useAuth();
-
+  
   // Fetch product reviews
   const { data: reviews = [], isLoading, refetch } = useQuery({
-    queryKey: [`${import.meta.env.VITE_API_URL}/api/products/${productId}/reviews`],
+    queryKey: [`/api/products/${productId}/reviews`],
     enabled: !!productId
   });
-
+  
   // Check if user can review this product (has purchased and received it)
   const { data: canReview = false, isLoading: isCheckingReviewEligibility } = useQuery({
-    queryKey: [`${import.meta.env.VITE_API_URL}/api/products/${productId}/can-review`],
+    queryKey: [`/api/products/${productId}/can-review`],
     enabled: !!productId && isAuthenticated,
   });
-
+  
   // Form setup
   const { register, handleSubmit, reset, formState: { errors } } = useForm<ReviewFormData>({
     resolver: zodResolver(reviewSchema),
@@ -52,11 +52,11 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
       rating: 5
     }
   });
-
+  
   // Submit review mutation
   const addReviewMutation = useMutation({
     mutationFn: async (data: ReviewFormData) => {
-      return apiRequest(`${import.meta.env.VITE_API_URL}/api/products/${productId}/reviews`, {
+      return apiRequest(`/api/products/${productId}/reviews`, {
         method: 'POST',
         body: JSON.stringify({
           customerName: user?.name || data.customerName,
@@ -75,7 +75,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
       });
       reset();
       refetch();
-      queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/products/${productId}`] });
+      queryClient.invalidateQueries({ queryKey: [`/api/products/${productId}`] });
     },
     onError: () => {
       toast({
@@ -85,44 +85,44 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
       });
     }
   });
-
+  
   const onSubmit = (data: ReviewFormData) => {
     data.rating = selectedRating;
     addReviewMutation.mutate(data);
   };
-
+  
   // Calculate average rating
-  const averageRating = reviews.length ?
-    reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length :
+  const averageRating = reviews.length ? 
+    reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length : 
     0;
-
+  
   // Helper to render star ratings
   const renderStars = (rating: number) => {
     const stars = [];
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
-
+    
     for (let i = 0; i < fullStars; i++) {
       stars.push(<Star key={i} className="fill-[#DDA15E] text-[#DDA15E] w-5 h-5" />);
     }
-
+    
     if (hasHalfStar) {
       stars.push(<StarHalf key="half" className="fill-[#DDA15E] text-[#DDA15E] w-5 h-5" />);
     }
-
+    
     for (let i = Math.ceil(rating); i < 5; i++) {
       stars.push(<Star key={`empty-${i}`} className="text-gray-300 w-5 h-5" />);
     }
-
+    
     return stars;
   };
-
+  
   return (
     <div className="mt-16">
       <h2 className="font-heading text-forest text-2xl md:text-3xl font-bold mb-8">
         Customer Reviews
       </h2>
-
+      
       {/* Review summary */}
       <div className="flex items-start flex-wrap gap-8 mb-12">
         <div className="bg-muted rounded-lg p-6 flex flex-col items-center min-w-[200px]">
@@ -136,10 +136,10 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
             Based on {reviews.length} review{reviews.length !== 1 ? 's' : ''}
           </p>
         </div>
-
+        
         <div className="flex-1 min-w-[300px]">
           <h3 className="text-forest font-bold text-xl mb-4">Add Your Review</h3>
-
+          
           {isAuthenticated && !canReview && !isCheckingReviewEligibility && (
             <div className="bg-amber-50 border border-amber-200 rounded-md p-4 mb-4 text-amber-700 flex items-start">
               <AlertCircle className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
@@ -149,7 +149,7 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
               </div>
             </div>
           )}
-
+          
           {!isAuthenticated && (
             <div className="bg-blue-50 border border-blue-200 rounded-md p-4 mb-4 text-blue-700 flex items-start">
               <Info className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
@@ -161,19 +161,19 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
               </div>
             </div>
           )}
-
+          
           {((isAuthenticated && canReview) || !isAuthenticated) && (
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
-              <Input
-                placeholder="Your Name"
+              <Input 
+                placeholder="Your Name" 
                 {...register("customerName")}
               />
               {errors.customerName && (
                 <p className="text-destructive text-sm mt-1">{errors.customerName.message}</p>
               )}
             </div>
-
+            
             <div>
               <div className="flex items-center space-x-2 mb-2">
                 <p className="text-olive font-medium">Your Rating:</p>
@@ -185,18 +185,18 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
                       onClick={() => setSelectedRating(rating)}
                       className="focus:outline-none"
                     >
-                      <Star
-                        className={`w-6 h-6 ${selectedRating >= rating ? 'fill-[#DDA15E] text-[#DDA15E]' : 'text-gray-300'}`}
+                      <Star 
+                        className={`w-6 h-6 ${selectedRating >= rating ? 'fill-[#DDA15E] text-[#DDA15E]' : 'text-gray-300'}`} 
                       />
                     </button>
                   ))}
                 </div>
               </div>
             </div>
-
+            
             <div>
-              <Textarea
-                placeholder="Write your review here"
+              <Textarea 
+                placeholder="Write your review here" 
                 className="min-h-[120px]"
                 {...register("reviewText")}
               />
@@ -204,9 +204,9 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
                 <p className="text-destructive text-sm mt-1">{errors.reviewText.message}</p>
               )}
             </div>
-
-            <Button
-              type="submit"
+            
+            <Button 
+              type="submit" 
               className="bg-primary hover:bg-primary/90"
               disabled={addReviewMutation.isPending}
             >
@@ -216,13 +216,13 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
           )}
         </div>
       </div>
-
+      
       {/* Reviews list */}
       <div className="space-y-4">
         <h3 className="text-forest font-bold text-xl mb-6">
           {reviews.length ? 'Customer Feedback' : 'Be the first to review this product!'}
         </h3>
-
+        
         {isLoading ? (
           <div className="space-y-4">
             {[1, 2].map((i) => (

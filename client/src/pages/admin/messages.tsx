@@ -28,14 +28,14 @@ function AdminMessages() {
 
   // Fetch all contact messages
   const { data: messages = [], isLoading, error } = useQuery({
-    queryKey: [`${import.meta.env.VITE_API_URL}/api/admin/contact-messages`],
+    queryKey: ["/api/admin/contact-messages"],
     refetchInterval: 30000, // Refresh every 30 seconds
   });
 
   // Mutation to update message status
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status }: { id: number; status: string }) => {
-      return apiRequest(`${import.meta.env.VITE_API_URL}/api/admin/contact-messages/${id}`, {
+      return apiRequest(`/api/admin/contact-messages/${id}`, {
         method: "PATCH",
         body: JSON.stringify({ status }),
         headers: {
@@ -44,7 +44,7 @@ function AdminMessages() {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/admin/contact-messages`] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/contact-messages"] });
       toast({
         title: "Status Updated",
         description: "Message status has been updated successfully.",

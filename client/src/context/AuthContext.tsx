@@ -33,64 +33,64 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const storedToken = localStorage.getItem('auth_token');
     const storedUser = localStorage.getItem('auth_user');
-
+    
     if (storedToken && storedUser) {
       setToken(storedToken);
       setUser(JSON.parse(storedUser));
     }
-
+    
     setIsLoading(false);
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
       setIsLoading(true);
-
+      
       console.log('Attempting login with:', { email, password: '***' });
-
+      
       // Use direct fetch instead of apiRequest to better handle the response
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
+      const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ email, password })
       });
-
+      
       const data = await response.json();
-
+      
       if (!response.ok) {
         throw new Error(data.message || 'Login failed');
       }
-
+      
       console.log('Login response:', data);
-
+      
       // Save auth data to localStorage
       localStorage.setItem('auth_token', data.token);
       localStorage.setItem('auth_user', JSON.stringify(data.user));
-
+      
       // Update state
       setToken(data.token);
       setUser(data.user);
-
+      
       toast({
         title: 'Login successful',
         description: 'Welcome back!'
       });
-
+      
       return true;
     } catch (error) {
       let message = 'Login failed';
       if (error instanceof Error) {
         message = error.message;
       }
-
+      
       toast({
         title: 'Login failed',
         description: message,
         variant: 'destructive'
       });
-
+      
       return false;
     } finally {
       setIsLoading(false);
@@ -100,27 +100,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const register = async (name: string, email: string, password: string): Promise<boolean> => {
     try {
       setIsLoading(true);
-
+      
       // Use direct fetch instead of apiRequest for consistency with login
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
+      const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ name, email, password })
       });
-
+      
       const data = await response.json();
-
+      
       if (!response.ok) {
         throw new Error(data.message || 'Registration failed');
       }
-
+      
       toast({
         title: 'Registration successful',
         description: 'Your account has been created!'
       });
-
+      
       // Automatically log the user in
       return await login(email, password);
     } catch (error) {
@@ -128,13 +128,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (error instanceof Error) {
         message = error.message;
       }
-
+      
       toast({
         title: 'Registration failed',
         description: message,
         variant: 'destructive'
       });
-
+      
       return false;
     } finally {
       setIsLoading(false);
@@ -145,14 +145,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Clear auth data from localStorage
     localStorage.removeItem('auth_token');
     localStorage.removeItem('auth_user');
-
+    
     // Update state
     setToken(null);
     setUser(null);
-
+    
     // Invalidate all queries
     // queryClient.invalidateQueries();
-
+    
     toast({
       title: 'Logged out',
       description: 'You have been logged out successfully.'
@@ -162,12 +162,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const updateProfile = async (name: string): Promise<boolean> => {
     try {
       setIsLoading(true);
-
+      
       if (!token || !user) {
         throw new Error('You must be logged in to update your profile');
       }
-
-      const response = await apiRequest(`${import.meta.env.VITE_API_URL}/api/auth/profile`, {
+      
+      const response = await apiRequest('/api/auth/profile', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -175,36 +175,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         },
         body: JSON.stringify({ name })
       });
-
+      
       const data = await response.json();
-
+      
       if (!response.ok) {
         throw new Error(data.message || 'Profile update failed');
       }
-
+      
       // Update user in localStorage and state
       const updatedUser = { ...user, name };
       localStorage.setItem('auth_user', JSON.stringify(updatedUser));
       setUser(updatedUser);
-
+      
       toast({
         title: 'Profile updated',
         description: 'Your profile has been updated successfully.'
       });
-
+      
       return true;
     } catch (error) {
       let message = 'Profile update failed';
       if (error instanceof Error) {
         message = error.message;
       }
-
+      
       toast({
         title: 'Profile update failed',
         description: message,
         variant: 'destructive'
       });
-
+      
       return false;
     } finally {
       setIsLoading(false);

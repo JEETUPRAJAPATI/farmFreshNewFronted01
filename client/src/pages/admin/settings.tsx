@@ -28,7 +28,7 @@ const settingsSchema = z.object({
   site_name: z.string().min(1, 'Site name is required'),
   site_tagline: z.string().min(1, 'Site tagline is required'),
   site_logo: z.string().optional(),
-
+  
   // Store Information
   store_email: z.string().email('Valid email is required'),
   store_phone: z.string().min(1, 'Phone number is required'),
@@ -37,7 +37,7 @@ const settingsSchema = z.object({
   store_state: z.string().min(1, 'State is required'),
   store_zip: z.string().min(1, 'ZIP code is required'),
   store_country: z.string().min(1, 'Country is required'),
-
+  
   // Social Media Links
   social_facebook: z.string().url('Valid URL required').optional().or(z.literal('')),
   social_instagram: z.string().url('Valid URL required').optional().or(z.literal('')),
@@ -53,8 +53,8 @@ export default function AdminSettings() {
   const { toast } = useToast();
 
   const { data: settings = [], isLoading } = useQuery({
-    queryKey: [`${import.meta.env.VITE_API_URL}/api/admin/site-settings`],
-    queryFn: () => apiRequest(`${import.meta.env.VITE_API_URL}/api/admin/site-settings`),
+    queryKey: ['/api/admin/site-settings'],
+    queryFn: () => apiRequest('/api/admin/site-settings'),
   });
 
   // Transform settings array to object for form
@@ -78,13 +78,13 @@ export default function AdminSettings() {
 
   const updateSettingMutation = useMutation({
     mutationFn: (setting: { key: string; value: string; type: string; description?: string }) =>
-      apiRequest(`${import.meta.env.VITE_API_URL}/api/admin/site-settings`, {
+      apiRequest('/api/admin/site-settings', {
         method: 'POST',
         body: JSON.stringify(setting),
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/admin/site-settings`] });
-      queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/site-settings`] });
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/site-settings'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/site-settings'] });
     },
   });
 
@@ -249,7 +249,7 @@ export default function AdminSettings() {
                   )}
                 </div>
               </div>
-
+              
               <div>
                 <Label htmlFor="store_address">Address</Label>
                 <Input
@@ -415,8 +415,8 @@ export default function AdminSettings() {
           </Card>
 
           <div className="flex justify-end">
-            <Button
-              type="submit"
+            <Button 
+              type="submit" 
               disabled={updateSettingMutation.isPending}
               className="min-w-[120px]"
             >

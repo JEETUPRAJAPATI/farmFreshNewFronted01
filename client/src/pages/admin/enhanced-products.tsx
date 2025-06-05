@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import AdminAuthWrapper from '@/components/admin/AdminAuthWrapper';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle
+import { 
+  Card, 
+  CardContent, 
+  CardHeader, 
+  CardTitle 
 } from '@/components/ui/card';
 import {
   Table,
@@ -17,11 +17,11 @@ import {
 } from "@/components/ui/table";
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {
-  Plus,
-  Search,
-  Edit,
-  Trash2,
+import { 
+  Plus, 
+  Search, 
+  Edit, 
+  Trash2, 
   Eye,
   ChevronLeft,
   ChevronRight,
@@ -112,37 +112,37 @@ const enhancedProductFormSchema = z.object({
   shortDescription: z.string().min(10, "Short description must be at least 10 characters"),
   description: z.string().min(20, "Full description must be at least 20 characters"),
   category: z.string().min(1, "Please select a category"),
-
+  
   // Pricing & Inventory
   price: z.number().min(0.01, "Price must be greater than 0"),
   discountPrice: z.number().optional(),
   stockQuantity: z.number().int().min(0, "Stock quantity must be 0 or greater"),
   sku: z.string().optional(),
-
+  
   // Product Attributes
   naturallyGrown: z.boolean().default(false),
   chemicalFree: z.boolean().default(false),
   premiumQuality: z.boolean().default(false),
-
+  
   // Media
   imageUrl: z.string().url("Please enter a valid image URL"),
   imageUrls: z.string().optional(),
   videoUrl: z.string().url().optional().or(z.literal("")),
-
+  
   // Farmer Details
   farmerId: z.number().int().positive("Please select a valid farmer"),
-
+  
   // SEO
   metaTitle: z.string().optional(),
   metaDescription: z.string().optional(),
   slug: z.string().optional(),
-
+  
   // Social Sharing
   enableShareButtons: z.boolean().default(true),
   enableWhatsappShare: z.boolean().default(true),
   enableFacebookShare: z.boolean().default(true),
   enableInstagramShare: z.boolean().default(true),
-
+  
   featured: z.boolean().default(false)
 });
 
@@ -197,23 +197,23 @@ export default function EnhancedAdminProducts() {
   const fetchProducts = async (page = 1) => {
     setIsLoading(true);
     setError(null);
-
+    
     try {
       const token = localStorage.getItem('adminToken');
       if (!token) {
         throw new Error('Authentication required');
       }
-
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/products?page=${page}&limit=${productsPerPage}`, {
+      
+      const response = await fetch(`/api/admin/products?page=${page}&limit=${productsPerPage}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
-
+      
       if (!response.ok) {
         throw new Error('Failed to fetch products');
       }
-
+      
       const data = await response.json();
       setProducts(data.products || []);
       setTotalPages(data.pagination?.totalPages || 1);
@@ -229,19 +229,19 @@ export default function EnhancedAdminProducts() {
       setIsLoading(false);
     }
   };
-
+  
   // Fetch categories
   const fetchCategories = async () => {
     try {
       const token = localStorage.getItem('adminToken');
       if (!token) return;
-
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/product-categories`, {
+      
+      const response = await fetch('/api/admin/product-categories', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
-
+      
       if (response.ok) {
         const data = await response.json();
         setCategories(data.categories || []);
@@ -250,16 +250,16 @@ export default function EnhancedAdminProducts() {
       // Silent error handling for categories
     }
   };
-
+  
   // Fetch farmers for product creation/editing
   const fetchFarmers = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/farmers`);
-
+      const response = await fetch('/api/farmers');
+      
       if (response.ok) {
         const data = await response.json();
-        setFarmers(data.map((farmer: any) => ({
-          id: farmer.id,
+        setFarmers(data.map((farmer: any) => ({ 
+          id: farmer.id, 
           name: farmer.name,
           location: farmer.location || ''
         })));
@@ -277,7 +277,7 @@ export default function EnhancedAdminProducts() {
   }, []);
 
   // Filter products based on search term
-  const filteredProducts = products.filter(product =>
+  const filteredProducts = products.filter(product => 
     product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     product.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
     (product.sku && product.sku.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -296,20 +296,20 @@ export default function EnhancedAdminProducts() {
       if (!token) {
         throw new Error('Authentication required');
       }
-
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/products/${id}`, {
+      
+      const response = await fetch(`/api/admin/products/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
-
+      
       if (!response.ok) {
         throw new Error('Failed to delete product');
       }
-
+      
       fetchProducts(currentPage);
-
+      
       toast({
         title: "Product deleted",
         description: "The product has been deleted successfully.",
@@ -333,20 +333,20 @@ export default function EnhancedAdminProducts() {
       if (!token) {
         throw new Error('Authentication required');
       }
-
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/products/${id}/featured`, {
+      
+      const response = await fetch(`/api/admin/products/${id}/featured`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
-
+      
       if (!response.ok) {
         throw new Error('Failed to update product');
       }
-
+      
       fetchProducts(currentPage);
-
+      
       toast({
         title: currentFeatured ? "Product unfeatured" : "Product featured",
         description: `The product has been ${currentFeatured ? 'removed from' : 'added to'} featured products.`,
@@ -430,7 +430,7 @@ export default function EnhancedAdminProducts() {
       }
 
       // Process image URLs if provided
-      const imageUrls = data.imageUrls
+      const imageUrls = data.imageUrls 
         ? data.imageUrls.split(',').map(url => url.trim()).filter(url => url)
         : [];
 
@@ -446,10 +446,10 @@ export default function EnhancedAdminProducts() {
       };
 
       let response;
-
+      
       if (productToEdit) {
         // Update existing product
-        response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/products/${productToEdit.id}`, {
+        response = await fetch(`/api/admin/products/${productToEdit.id}`, {
           method: 'PUT',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -459,7 +459,7 @@ export default function EnhancedAdminProducts() {
         });
       } else {
         // Create new product
-        response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/products`, {
+        response = await fetch('/api/admin/products', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -468,18 +468,18 @@ export default function EnhancedAdminProducts() {
           body: JSON.stringify(requestData)
         });
       }
-
+      
       if (!response.ok) {
         throw new Error(productToEdit ? 'Failed to update product' : 'Failed to create product');
       }
-
+      
       fetchProducts(currentPage);
-
+      
       toast({
         title: productToEdit ? "Product updated" : "Product created",
         description: productToEdit ? "The product has been updated successfully." : "The product has been created successfully.",
       });
-
+      
       // Close dialogs and reset state
       setIsEditDialogOpen(false);
       setIsCreateDialogOpen(false);
@@ -559,8 +559,8 @@ export default function EnhancedAdminProducts() {
                           <TableRow key={product.id}>
                             <TableCell>
                               <div className="flex items-center space-x-3">
-                                <img
-                                  src={product.imageUrl}
+                                <img 
+                                  src={product.imageUrl} 
                                   alt={product.name}
                                   className="w-10 h-10 rounded object-cover"
                                 />
@@ -623,8 +623,8 @@ export default function EnhancedAdminProducts() {
                             </TableCell>
                             <TableCell>
                               <div className="flex space-x-2">
-                                <Button
-                                  variant="ghost"
+                                <Button 
+                                  variant="ghost" 
                                   size="icon"
                                   onClick={() => handleToggleFeatured(product.id, Boolean(product.featured))}
                                 >
@@ -634,15 +634,15 @@ export default function EnhancedAdminProducts() {
                                     <Star className="h-4 w-4" />
                                   )}
                                 </Button>
-                                <Button
-                                  variant="ghost"
+                                <Button 
+                                  variant="ghost" 
                                   size="icon"
                                   onClick={() => setupEditForm(product)}
                                 >
                                   <Edit className="h-4 w-4" />
                                 </Button>
-                                <Button
-                                  variant="ghost"
+                                <Button 
+                                  variant="ghost" 
                                   size="icon"
                                   onClick={() => {
                                     setProductToDelete(product);
@@ -704,7 +704,7 @@ export default function EnhancedAdminProducts() {
                   {productToEdit ? 'Edit Product' : 'Create New Product'}
                 </DialogTitle>
                 <DialogDescription>
-                  {productToEdit
+                  {productToEdit 
                     ? 'Update the product information below.'
                     : 'Fill in the details to create a new product in your catalog.'
                   }
@@ -738,7 +738,7 @@ export default function EnhancedAdminProducts() {
                             </FormItem>
                           )}
                         />
-
+                        
                         <FormField
                           control={form.control}
                           name="category"
@@ -789,10 +789,10 @@ export default function EnhancedAdminProducts() {
                           <FormItem>
                             <FormLabel>Full Description</FormLabel>
                             <FormControl>
-                              <Textarea
-                                placeholder="Detailed product description..."
+                              <Textarea 
+                                placeholder="Detailed product description..." 
                                 rows={4}
-                                {...field}
+                                {...field} 
                               />
                             </FormControl>
                             <FormDescription>
@@ -839,10 +839,10 @@ export default function EnhancedAdminProducts() {
                             <FormItem>
                               <FormLabel>Price (₹)</FormLabel>
                               <FormControl>
-                                <Input
-                                  type="number"
-                                  step="0.01"
-                                  placeholder="0.00"
+                                <Input 
+                                  type="number" 
+                                  step="0.01" 
+                                  placeholder="0.00" 
                                   {...field}
                                   onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
                                 />
@@ -859,10 +859,10 @@ export default function EnhancedAdminProducts() {
                             <FormItem>
                               <FormLabel>Discount Price (₹)</FormLabel>
                               <FormControl>
-                                <Input
-                                  type="number"
-                                  step="0.01"
-                                  placeholder="Optional discount price"
+                                <Input 
+                                  type="number" 
+                                  step="0.01" 
+                                  placeholder="Optional discount price" 
                                   {...field}
                                   onChange={(e) => field.onChange(parseFloat(e.target.value) || undefined)}
                                 />
@@ -882,9 +882,9 @@ export default function EnhancedAdminProducts() {
                             <FormItem>
                               <FormLabel>Stock Quantity</FormLabel>
                               <FormControl>
-                                <Input
-                                  type="number"
-                                  placeholder="100"
+                                <Input 
+                                  type="number" 
+                                  placeholder="100" 
                                   {...field}
                                   onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
                                 />
@@ -915,7 +915,7 @@ export default function EnhancedAdminProducts() {
                     <TabsContent value="attributes" className="space-y-4">
                       <div className="space-y-4">
                         <h4 className="text-sm font-medium">Product Qualities</h4>
-
+                        
                         <div className="grid grid-cols-1 gap-4">
                           <FormField
                             control={form.control}
@@ -1028,10 +1028,10 @@ export default function EnhancedAdminProducts() {
                           <FormItem>
                             <FormLabel>Additional Images</FormLabel>
                             <FormControl>
-                              <Textarea
+                              <Textarea 
                                 placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"
                                 rows={3}
-                                {...field}
+                                {...field} 
                               />
                             </FormControl>
                             <FormDescription>
@@ -1064,7 +1064,7 @@ export default function EnhancedAdminProducts() {
                     <TabsContent value="seo" className="space-y-4">
                       <div className="space-y-4">
                         <h4 className="text-sm font-medium">SEO Settings</h4>
-
+                        
                         <FormField
                           control={form.control}
                           name="metaTitle"
@@ -1087,10 +1087,10 @@ export default function EnhancedAdminProducts() {
                             <FormItem>
                               <FormLabel>Meta Description</FormLabel>
                               <FormControl>
-                                <Textarea
+                                <Textarea 
                                   placeholder="Brief description for search engines (150-160 chars)"
                                   rows={2}
-                                  {...field}
+                                  {...field} 
                                 />
                               </FormControl>
                               <FormDescription>Leave empty to use short description</FormDescription>
@@ -1117,7 +1117,7 @@ export default function EnhancedAdminProducts() {
 
                       <div className="space-y-4">
                         <h4 className="text-sm font-medium">Social Sharing Options</h4>
-
+                        
                         <div className="grid grid-cols-2 gap-4">
                           <FormField
                             control={form.control}
@@ -1225,8 +1225,8 @@ export default function EnhancedAdminProducts() {
                 <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
                   Cancel
                 </Button>
-                <Button
-                  variant="destructive"
+                <Button 
+                  variant="destructive" 
                   onClick={() => productToDelete && handleDeleteProduct(productToDelete.id)}
                 >
                   Delete Product

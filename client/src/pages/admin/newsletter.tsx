@@ -21,18 +21,18 @@ export default function NewsletterSubscriptionsPage() {
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
   const { data, isLoading, error } = useQuery<NewsletterSubscriptionsResponse>({
-    queryKey: [`${import.meta.env.VITE_API_URL}/api/admin/newsletter-subscriptions`],
+    queryKey: ["/api/admin/newsletter-subscriptions"],
   });
 
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
       setDeletingId(id);
-      return apiRequest(`${import.meta.env.VITE_API_URL}/api/admin/newsletter-subscriptions/${id}`, {
+      return apiRequest(`/api/admin/newsletter-subscriptions/${id}`, {
         method: "DELETE",
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/admin/newsletter-subscriptions`] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/newsletter-subscriptions"] });
       toast({
         title: "Success",
         description: "Newsletter subscription deleted successfully",

@@ -46,7 +46,7 @@ export default function ContactFormWithStorage() {
   // Set up the mutation to send the form data to the API
   const mutation = useMutation({
     mutationFn: async (data: ContactFormValues) => {
-      return apiRequest(`${import.meta.env.VITE_API_URL}/api/contact`, {
+      return apiRequest("/api/contact", {
         method: "POST",
         body: JSON.stringify(data)
       });
@@ -58,13 +58,13 @@ export default function ContactFormWithStorage() {
         description: "We've received your message and will get back to you soon.",
         variant: "default"
       });
-
+      
       // Reset the form
       reset();
-
+      
       // Show success state
       setIsSuccess(true);
-
+      
       // Hide success state after 5 seconds
       setTimeout(() => {
         setIsSuccess(false);
@@ -99,7 +99,7 @@ export default function ContactFormWithStorage() {
           <p>Your message has been sent successfully. We'll get back to you as soon as possible.</p>
         </div>
       ) : null}
-
+      
       <div className="grid gap-6 md:grid-cols-2">
         <div className="space-y-2">
           <label htmlFor="name" className="text-sm font-medium text-gray-700">
@@ -115,7 +115,7 @@ export default function ContactFormWithStorage() {
             <p className="text-sm text-red-500">{errors.name.message}</p>
           )}
         </div>
-
+        
         <div className="space-y-2">
           <label htmlFor="email" className="text-sm font-medium text-gray-700">
             Email Address
@@ -132,7 +132,7 @@ export default function ContactFormWithStorage() {
           )}
         </div>
       </div>
-
+      
       <div className="space-y-2">
         <label htmlFor="subject" className="text-sm font-medium text-gray-700">
           Subject
@@ -147,7 +147,7 @@ export default function ContactFormWithStorage() {
           <p className="text-sm text-red-500">{errors.subject.message}</p>
         )}
       </div>
-
+      
       <div className="space-y-2">
         <label htmlFor="message" className="text-sm font-medium text-gray-700">
           Message
@@ -163,7 +163,7 @@ export default function ContactFormWithStorage() {
           <p className="text-sm text-red-500">{errors.message.message}</p>
         )}
       </div>
-
+      
       <div className="flex justify-between">
         <Button
           type="submit"
@@ -172,7 +172,7 @@ export default function ContactFormWithStorage() {
         >
           {(isSubmitting || mutation.isPending) ? "Sending..." : "Send Message"}
         </Button>
-
+        
         <Button
           type="button"
           variant="outline"

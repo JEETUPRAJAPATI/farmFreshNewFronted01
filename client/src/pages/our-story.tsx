@@ -13,7 +13,7 @@ export default function OurStory() {
 
   // Fetch team members from database
   const { data: teamMembers = [], isLoading: isLoadingTeam } = useQuery<TeamMember[]>({
-    queryKey: [`${import.meta.env.VITE_API_URL}/api/team-members`],
+    queryKey: ["/api/team-members"],
   });
 
   // Filter only active team members and sort by display order
@@ -28,12 +28,12 @@ export default function OurStory() {
   return (
     <>
       {/* Hero Section */}
-      <ParallaxSection
+      <ParallaxSection 
         backgroundUrl="https://images.pexels.com/photos/1084540/pexels-photo-1084540.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
         className="pt-48 pb-24"
       >
         <div className="container mx-auto px-4 text-center">
-          <motion.h1
+          <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -41,7 +41,7 @@ export default function OurStory() {
           >
             Our Story
           </motion.h1>
-          <motion.p
+          <motion.p 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -69,9 +69,9 @@ export default function OurStory() {
               </p>
             </div>
             <div>
-              <img
-                src="https://images.pexels.com/photos/1084545/pexels-photo-1084545.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-                alt="Farmers in a traditional farm"
+              <img 
+                src="https://images.pexels.com/photos/1084545/pexels-photo-1084545.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" 
+                alt="Farmers in a traditional farm" 
                 className="rounded-lg shadow-xl w-full h-auto object-cover"
               />
             </div>
@@ -88,7 +88,7 @@ export default function OurStory() {
               We envision a world where traditional farming knowledge is valued and preserved, where farmers receive fair compensation for their expertise, and where consumers can access truly natural, chemical-free foods directly from their source.
             </p>
           </div>
-
+          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 scroll-animation">
             <div className="bg-white p-8 rounded-lg shadow-md">
               <div className="w-16 h-16 bg-secondary/20 rounded-full flex items-center justify-center mb-4">
@@ -101,7 +101,7 @@ export default function OurStory() {
                 We believe in foods as nature intended—grown without shortcuts, artificial inputs, or genetic modification. True flavor and nutrition come from traditional methods that respect natural processes.
               </p>
             </div>
-
+            
             <div className="bg-white p-8 rounded-lg shadow-md">
               <div className="w-16 h-16 bg-secondary/20 rounded-full flex items-center justify-center mb-4">
                 <svg className="w-8 h-8 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -113,7 +113,7 @@ export default function OurStory() {
                 We pay our farmers significantly above market rates to honor their knowledge and commitment to quality. This creates sustainable livelihoods that allow them to continue traditional practices.
               </p>
             </div>
-
+            
             <div className="bg-white p-8 rounded-lg shadow-md">
               <div className="w-16 h-16 bg-secondary/20 rounded-full flex items-center justify-center mb-4">
                 <svg className="w-8 h-8 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -138,11 +138,11 @@ export default function OurStory() {
               From a small operation working with just three farmers to a thriving marketplace connecting traditional growers with conscious consumers nationwide.
             </p>
           </div>
-
+          
           <div className="relative scroll-animation">
             {/* Timeline Line */}
             <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-secondary/30"></div>
-
+            
             {/* 2018 - Beginning */}
             <div className="relative z-10 mb-12">
               <div className="flex items-center">
@@ -159,7 +159,7 @@ export default function OurStory() {
                 <div className="flex-1 pl-8 md:pl-12"></div>
               </div>
             </div>
-
+            
             {/* 2019 - First Partnerships */}
             <div className="relative z-10 mb-12">
               <div className="flex items-center">
@@ -176,7 +176,7 @@ export default function OurStory() {
                 </div>
               </div>
             </div>
-
+            
             {/* 2020 - Growth Despite Challenges */}
             <div className="relative z-10 mb-12">
               <div className="flex items-center">
@@ -193,7 +193,7 @@ export default function OurStory() {
                 <div className="flex-1 pl-8 md:pl-12"></div>
               </div>
             </div>
-
+            
             {/* 2021 - Certification & Standardization */}
             <div className="relative z-10 mb-12">
               <div className="flex items-center">
@@ -210,7 +210,7 @@ export default function OurStory() {
                 </div>
               </div>
             </div>
-
+            
             {/* 2022 - Farmer Training Programs */}
             <div className="relative z-10 mb-12">
               <div className="flex items-center">
@@ -227,7 +227,7 @@ export default function OurStory() {
                 <div className="flex-1 pl-8 md:pl-12"></div>
               </div>
             </div>
-
+            
             {/* 2023 - National Expansion */}
             <div className="relative z-10">
               <div className="flex items-center">
@@ -257,7 +257,7 @@ export default function OurStory() {
               The passionate individuals working behind the scenes to connect farmers with consumers while preserving traditional growing methods.
             </p>
           </div>
-
+          
           {isLoadingTeam ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 scroll-animation">
               {[...Array(4)].map((_, i) => (
@@ -278,9 +278,9 @@ export default function OurStory() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 scroll-animation">
               {activeTeamMembers.map((member) => (
                 <div key={member.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
-                  <img
-                    src={member.profileImageUrl || "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"}
-                    alt={member.name}
+                  <img 
+                    src={member.profileImageUrl || "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"} 
+                    alt={member.name} 
                     className="w-full h-64 object-cover object-center"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
@@ -302,7 +302,7 @@ export default function OurStory() {
           )}
         </div>
       </section>
-
+      
       {/* Call to Action */}
       <section className="py-16 bg-forest text-white">
         <div className="container mx-auto px-4 text-center">

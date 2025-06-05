@@ -16,19 +16,19 @@ export default function Farmers() {
   }, [setupScrollAnimation]);
 
   // Get farmers data
-  const { data: farmers = [], isLoading } = useQuery({
-    queryKey: [`${import.meta.env.VITE_API_URL}/api/farmers`]
+  const { data: farmers = [], isLoading } = useQuery({ 
+    queryKey: ['/api/farmers'] 
   });
 
   return (
     <>
       {/* Hero Section */}
-      <ParallaxSection
+      <ParallaxSection 
         backgroundUrl="https://images.pexels.com/photos/2886937/pexels-photo-2886937.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
         className="pt-48 pb-24"
       >
         <div className="container mx-auto px-4 text-center">
-          <motion.h1
+          <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -36,7 +36,7 @@ export default function Farmers() {
           >
             Meet Our Farmers
           </motion.h1>
-          <motion.p
+          <motion.p 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -81,14 +81,14 @@ export default function Farmers() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {farmers.map((farmer, index) => (
-                <motion.div
+                <motion.div 
                   key={farmer.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="bg-white rounded-lg overflow-hidden shadow-md h-full flex flex-col"
                 >
-                  <img
+                  <img 
                     src={farmer.imageUrl}
                     alt={farmer.name}
                     className="w-full h-64 object-cover"
@@ -102,8 +102,8 @@ export default function Farmers() {
                       <span>{farmer.location}</span>
                     </div>
                     <p className="text-olive mb-4 flex-grow">
-                      {farmer.story.length > 150
-                        ? `${farmer.story.substring(0, 150)}...`
+                      {farmer.story.length > 150 
+                        ? `${farmer.story.substring(0, 150)}...` 
                         : farmer.story}
                     </p>
                     <p className="text-forest font-medium mb-4">
@@ -131,12 +131,12 @@ export default function Farmers() {
               Our farmers use methods that have been perfected over generations, producing foods with exceptional flavor while nurturing the earth.
             </p>
           </div>
-
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-16 scroll-animation">
             <div>
-              <img
-                src="https://images.pexels.com/photos/2165688/pexels-photo-2165688.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-                alt="Traditional farming methods"
+              <img 
+                src="https://images.pexels.com/photos/2165688/pexels-photo-2165688.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" 
+                alt="Traditional farming methods" 
                 className="rounded-lg shadow-xl w-full h-auto"
               />
             </div>
@@ -151,7 +151,7 @@ export default function Farmers() {
               </p>
             </div>
           </div>
-
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center scroll-animation">
             <div className="order-2 md:order-1">
               <h3 className="font-heading text-forest text-2xl font-semibold mb-4">Natural Fertilization</h3>
@@ -164,16 +164,16 @@ export default function Farmers() {
               </p>
             </div>
             <div className="order-1 md:order-2">
-              <img
-                src="https://images.pexels.com/photos/1483881/pexels-photo-1483881.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-                alt="Natural fertilization methods"
+              <img 
+                src="https://images.pexels.com/photos/1483881/pexels-photo-1483881.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" 
+                alt="Natural fertilization methods" 
                 className="rounded-lg shadow-xl w-full h-auto"
               />
             </div>
           </div>
         </div>
       </section>
-
+      
       {/* Call to Action */}
       <section className="py-16 bg-forest text-white">
         <div className="container mx-auto px-4 text-center">

@@ -8,13 +8,13 @@ import { insertFarmerSchema, type Farmer } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
+import { 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableHead, 
+  TableHeader, 
+  TableRow 
 } from "@/components/ui/table";
 import {
   Dialog,
@@ -34,11 +34,11 @@ import {
   FormMessage
 } from "@/components/ui/form";
 import { toast } from "@/hooks/use-toast";
-import {
-  Pencil,
-  Trash2,
-  Plus,
-  Search,
+import { 
+  Pencil, 
+  Trash2, 
+  Plus, 
+  Search, 
   RefreshCw,
   Upload,
   ImageIcon,
@@ -91,16 +91,16 @@ export default function FarmerManagement() {
   const [imagePreview, setImagePreview] = useState<string>("");
   const [uploadMethod, setUploadMethod] = useState<"url" | "upload">("url");
   const fileInputRef = useRef<HTMLInputElement>(null);
-
+  
   const queryClient = useQueryClient();
 
   // Fetch farmers data
-  const {
-    data: farmers = [],
+  const { 
+    data: farmers = [], 
     isLoading,
-    refetch
-  } = useQuery<Farmer[]>({
-    queryKey: [`${import.meta.env.VITE_API_URL}/api/admin/farmers`],
+    refetch 
+  } = useQuery<Farmer[]>({ 
+    queryKey: ['/api/admin/farmers'],
   });
 
   // Image handling functions
@@ -151,7 +151,7 @@ export default function FarmerManagement() {
   // Add farmer mutation
   const addFarmerMutation = useMutation({
     mutationFn: async (data: FarmerFormValues) => {
-      return apiRequest(`${import.meta.env.VITE_API_URL}/api/admin/farmers`, {
+      return apiRequest("/api/admin/farmers", {
         method: "POST",
         body: JSON.stringify(data)
       });
@@ -161,7 +161,7 @@ export default function FarmerManagement() {
         title: "Farmer added successfully",
         variant: "default"
       });
-      queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/admin/farmers`] });
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/farmers'] });
       setIsAddDialogOpen(false);
       addForm.reset();
     },
@@ -177,7 +177,7 @@ export default function FarmerManagement() {
   // Update farmer mutation
   const updateFarmerMutation = useMutation({
     mutationFn: async ({ id, data }: { id: number, data: FarmerFormValues }) => {
-      return apiRequest(`${import.meta.env.VITE_API_URL}/api/admin/farmers/${id}`, {
+      return apiRequest(`/api/admin/farmers/${id}`, {
         method: "PUT",
         body: JSON.stringify(data)
       });
@@ -187,7 +187,7 @@ export default function FarmerManagement() {
         title: "Farmer updated successfully",
         variant: "default"
       });
-      queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/admin/farmers`] });
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/farmers'] });
       setIsEditDialogOpen(false);
     },
     onError: (error) => {
@@ -202,7 +202,7 @@ export default function FarmerManagement() {
   // Delete farmer mutation
   const deleteFarmerMutation = useMutation({
     mutationFn: async (id: number) => {
-      return apiRequest(`${import.meta.env.VITE_API_URL}/api/admin/farmers/${id}`, {
+      return apiRequest(`/api/admin/farmers/${id}`, {
         method: "DELETE"
       });
     },
@@ -211,7 +211,7 @@ export default function FarmerManagement() {
         title: "Farmer deleted successfully",
         variant: "default"
       });
-      queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/admin/farmers`] });
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/farmers'] });
       setIsDeleteDialogOpen(false);
     },
     onError: (error) => {
@@ -331,7 +331,7 @@ export default function FarmerManagement() {
   };
 
   // Filter farmers based on search term
-  const filteredFarmers = farmers.filter((farmer: Farmer) =>
+  const filteredFarmers = farmers.filter((farmer: Farmer) => 
     farmer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     farmer.specialty.toLowerCase().includes(searchTerm.toLowerCase()) ||
     farmer.location.toLowerCase().includes(searchTerm.toLowerCase())
@@ -341,7 +341,7 @@ export default function FarmerManagement() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <h2 className="text-2xl font-bold">Farmer Management</h2>
-
+        
         <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
           <div className="relative flex-grow">
             <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -352,17 +352,17 @@ export default function FarmerManagement() {
               className="pl-8"
             />
           </div>
-
+          
           <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => refetch()}
+            <Button 
+              variant="outline" 
+              size="icon" 
+              onClick={() => refetch()} 
               title="Refresh"
             >
               <RefreshCw className="h-4 w-4" />
             </Button>
-
+            
             <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
               <DialogTrigger asChild>
                 <Button>
@@ -377,7 +377,7 @@ export default function FarmerManagement() {
                     Fill in the details to add a new farmer to the platform.
                   </DialogDescription>
                 </DialogHeader>
-
+                
                 <Form {...addForm}>
                   <form onSubmit={addForm.handleSubmit(onAddSubmit)} className="space-y-4 max-h-[70vh] overflow-y-auto">
                     {/* Basic Information */}
@@ -397,7 +397,7 @@ export default function FarmerManagement() {
                             </FormItem>
                           )}
                         />
-
+                        
                         <FormField
                           control={addForm.control}
                           name="email"
@@ -411,7 +411,7 @@ export default function FarmerManagement() {
                             </FormItem>
                           )}
                         />
-
+                        
                         <FormField
                           control={addForm.control}
                           name="phone"
@@ -425,7 +425,7 @@ export default function FarmerManagement() {
                             </FormItem>
                           )}
                         />
-
+                        
                         <FormField
                           control={addForm.control}
                           name="specialty"
@@ -440,7 +440,7 @@ export default function FarmerManagement() {
                           )}
                         />
                       </div>
-
+                      
                       <FormField
                         control={addForm.control}
                         name="location"
@@ -473,7 +473,7 @@ export default function FarmerManagement() {
                             </FormItem>
                           )}
                         />
-
+                        
                         <FormField
                           control={addForm.control}
                           name="farmSize"
@@ -487,7 +487,7 @@ export default function FarmerManagement() {
                             </FormItem>
                           )}
                         />
-
+                        
                         <FormField
                           control={addForm.control}
                           name="experienceYears"
@@ -495,9 +495,9 @@ export default function FarmerManagement() {
                             <FormItem>
                               <FormLabel>Experience (Years)</FormLabel>
                               <FormControl>
-                                <Input
-                                  type="number"
-                                  placeholder="0"
+                                <Input 
+                                  type="number" 
+                                  placeholder="0" 
                                   {...field}
                                   onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
                                 />
@@ -506,7 +506,7 @@ export default function FarmerManagement() {
                             </FormItem>
                           )}
                         />
-
+                        
                         <FormField
                           control={addForm.control}
                           name="certificationStatus"
@@ -531,7 +531,7 @@ export default function FarmerManagement() {
                           )}
                         />
                       </div>
-
+                      
                       <FormField
                         control={addForm.control}
                         name="certificationDetails"
@@ -564,7 +564,7 @@ export default function FarmerManagement() {
                             </FormItem>
                           )}
                         />
-
+                        
                         <FormField
                           control={addForm.control}
                           name="socialMedia"
@@ -598,7 +598,7 @@ export default function FarmerManagement() {
                             </FormItem>
                           )}
                         />
-
+                        
                         <FormField
                           control={addForm.control}
                           name="panNumber"
@@ -612,7 +612,7 @@ export default function FarmerManagement() {
                             </FormItem>
                           )}
                         />
-
+                        
                         <FormField
                           control={addForm.control}
                           name="aadharNumber"
@@ -645,7 +645,7 @@ export default function FarmerManagement() {
                           </FormItem>
                         )}
                       />
-
+                      
                       <FormField
                         control={addForm.control}
                         name="story"
@@ -653,10 +653,10 @@ export default function FarmerManagement() {
                           <FormItem>
                             <FormLabel>Story *</FormLabel>
                             <FormControl>
-                              <Textarea
-                                placeholder="Tell the farmer's story, their farming journey, and what makes them special..."
-                                className="min-h-[100px]"
-                                {...field}
+                              <Textarea 
+                                placeholder="Tell the farmer's story, their farming journey, and what makes them special..." 
+                                className="min-h-[100px]" 
+                                {...field} 
                               />
                             </FormControl>
                             <FormMessage />
@@ -687,7 +687,7 @@ export default function FarmerManagement() {
                             </FormItem>
                           )}
                         />
-
+                        
                         <FormField
                           control={addForm.control}
                           name="verified"
@@ -706,7 +706,7 @@ export default function FarmerManagement() {
                             </FormItem>
                           )}
                         />
-
+                        
                         <FormField
                           control={addForm.control}
                           name="active"
@@ -727,17 +727,17 @@ export default function FarmerManagement() {
                         />
                       </div>
                     </div>
-
+                    
                     <DialogFooter>
-                      <Button
-                        type="button"
-                        variant="outline"
+                      <Button 
+                        type="button" 
+                        variant="outline" 
                         onClick={() => setIsAddDialogOpen(false)}
                       >
                         Cancel
                       </Button>
-                      <Button
-                        type="submit"
+                      <Button 
+                        type="submit" 
                         disabled={addFarmerMutation.isPending}
                       >
                         {addFarmerMutation.isPending ? "Adding..." : "Add Farmer"}
@@ -786,7 +786,7 @@ export default function FarmerManagement() {
                 <TableRow key={farmer.id}>
                   <TableCell className="font-medium">
                     <div className="flex items-center gap-3">
-                      <div
+                      <div 
                         className="w-10 h-10 rounded-full bg-muted overflow-hidden flex-shrink-0"
                         style={{ backgroundImage: `url(${farmer.imageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
                       ></div>
@@ -840,7 +840,7 @@ export default function FarmerManagement() {
               Update the farmer's information.
             </DialogDescription>
           </DialogHeader>
-
+          
           <Form {...editForm}>
             <form onSubmit={editForm.handleSubmit(onEditSubmit)} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -857,7 +857,7 @@ export default function FarmerManagement() {
                     </FormItem>
                   )}
                 />
-
+                
                 <FormField
                   control={editForm.control}
                   name="specialty"
@@ -872,7 +872,7 @@ export default function FarmerManagement() {
                   )}
                 />
               </div>
-
+              
               <FormField
                 control={editForm.control}
                 name="location"
@@ -886,7 +886,7 @@ export default function FarmerManagement() {
                   </FormItem>
                 )}
               />
-
+              
               <FormField
                 control={editForm.control}
                 name="imageUrl"
@@ -900,7 +900,7 @@ export default function FarmerManagement() {
                   </FormItem>
                 )}
               />
-
+              
               <FormField
                 control={editForm.control}
                 name="story"
@@ -908,16 +908,16 @@ export default function FarmerManagement() {
                   <FormItem>
                     <FormLabel>Story</FormLabel>
                     <FormControl>
-                      <Textarea
-                        className="min-h-[100px]"
-                        {...field}
+                      <Textarea 
+                        className="min-h-[100px]" 
+                        {...field} 
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
+              
               <FormField
                 control={editForm.control}
                 name="featured"
@@ -936,17 +936,17 @@ export default function FarmerManagement() {
                   </FormItem>
                 )}
               />
-
+              
               <DialogFooter>
-                <Button
-                  type="button"
-                  variant="outline"
+                <Button 
+                  type="button" 
+                  variant="outline" 
                   onClick={() => setIsEditDialogOpen(false)}
                 >
                   Cancel
                 </Button>
-                <Button
-                  type="submit"
+                <Button 
+                  type="submit" 
                   disabled={updateFarmerMutation.isPending}
                 >
                   {updateFarmerMutation.isPending ? "Updating..." : "Update Farmer"}
@@ -967,16 +967,16 @@ export default function FarmerManagement() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
+            <Button 
+              type="button" 
+              variant="outline" 
               onClick={() => setIsDeleteDialogOpen(false)}
             >
               Cancel
             </Button>
-            <Button
-              type="button"
-              variant="destructive"
+            <Button 
+              type="button" 
+              variant="destructive" 
               onClick={confirmDelete}
               disabled={deleteFarmerMutation.isPending}
             >

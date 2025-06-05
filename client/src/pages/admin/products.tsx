@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import AdminAuthWrapper from '@/components/admin/AdminAuthWrapper';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle
+import { 
+  Card, 
+  CardContent, 
+  CardHeader, 
+  CardTitle 
 } from '@/components/ui/card';
 import {
   Table,
@@ -17,11 +17,11 @@ import {
 } from "@/components/ui/table";
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {
-  Plus,
-  Search,
-  Edit,
-  Trash2,
+import { 
+  Plus, 
+  Search, 
+  Edit, 
+  Trash2, 
   Eye,
   ChevronLeft,
   ChevronRight,
@@ -134,23 +134,23 @@ export default function AdminProducts() {
   const fetchProducts = async (page = 1) => {
     setIsLoading(true);
     setError(null);
-
+    
     try {
       const token = localStorage.getItem('adminToken');
       if (!token) {
         throw new Error('Authentication required');
       }
-
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/products?page=${page}&limit=${productsPerPage}`, {
+      
+      const response = await fetch(`/api/admin/products?page=${page}&limit=${productsPerPage}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
-
+      
       if (!response.ok) {
         throw new Error('Failed to fetch products');
       }
-
+      
       const data: PaginatedProducts = await response.json();
       setProducts(data.products);
       setTotalPages(data.pagination.totalPages);
@@ -166,7 +166,7 @@ export default function AdminProducts() {
       setIsLoading(false);
     }
   };
-
+  
   // Fetch categories
   const fetchCategories = async () => {
     try {
@@ -174,17 +174,17 @@ export default function AdminProducts() {
       if (!token) {
         throw new Error('Authentication required');
       }
-
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/product-categories`, {
+      
+      const response = await fetch('/api/admin/product-categories', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
-
+      
       if (!response.ok) {
         throw new Error('Failed to fetch categories');
       }
-
+      
       const data = await response.json();
       setCategories(data.categories);
     } catch (err) {
@@ -195,16 +195,16 @@ export default function AdminProducts() {
       });
     }
   };
-
+  
   // Fetch farmers for product creation/editing
   const fetchFarmers = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/farmers`);
-
+      const response = await fetch('/api/farmers');
+      
       if (!response.ok) {
         throw new Error('Failed to fetch farmers');
       }
-
+      
       const data = await response.json();
       setFarmers(data.map((farmer: any) => ({ id: farmer.id, name: farmer.name })));
     } catch (err) {
@@ -224,7 +224,7 @@ export default function AdminProducts() {
   }, []);
 
   // Filter products based on search term
-  const filteredProducts = products.filter(product =>
+  const filteredProducts = products.filter(product => 
     product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     product.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -242,21 +242,21 @@ export default function AdminProducts() {
       if (!token) {
         throw new Error('Authentication required');
       }
-
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/products/${id}`, {
+      
+      const response = await fetch(`/api/admin/products/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
-
+      
       if (!response.ok) {
         throw new Error('Failed to delete product');
       }
-
+      
       // Refresh products list
       fetchProducts(currentPage);
-
+      
       toast({
         title: "Product deleted",
         description: "The product has been deleted successfully.",
@@ -280,21 +280,21 @@ export default function AdminProducts() {
       if (!token) {
         throw new Error('Authentication required');
       }
-
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/products/${id}/featured`, {
+      
+      const response = await fetch(`/api/admin/products/${id}/featured`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
-
+      
       if (!response.ok) {
         throw new Error('Failed to update product');
       }
-
+      
       // Refresh products list
       fetchProducts(currentPage);
-
+      
       toast({
         title: currentFeatured ? "Product unfeatured" : "Product featured",
         description: `The product has been ${currentFeatured ? 'removed from' : 'added to'} featured products.`,
@@ -348,10 +348,10 @@ export default function AdminProducts() {
       }
 
       let response;
-
+      
       if (productToEdit) {
         // Update existing product
-        response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/products/${productToEdit.id}`, {
+        response = await fetch(`/api/admin/products/${productToEdit.id}`, {
           method: 'PUT',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -361,7 +361,7 @@ export default function AdminProducts() {
         });
       } else {
         // Create new product
-        response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/products`, {
+        response = await fetch('/api/admin/products', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -370,19 +370,19 @@ export default function AdminProducts() {
           body: JSON.stringify(data)
         });
       }
-
+      
       if (!response.ok) {
         throw new Error(productToEdit ? 'Failed to update product' : 'Failed to create product');
       }
-
+      
       // Refresh products list
       fetchProducts(currentPage);
-
+      
       toast({
         title: productToEdit ? "Product updated" : "Product created",
         description: productToEdit ? "The product has been updated successfully." : "The product has been created successfully.",
       });
-
+      
       // Close dialogs and reset state
       setIsEditDialogOpen(false);
       setIsCreateDialogOpen(false);
@@ -480,8 +480,8 @@ export default function AdminProducts() {
                             </TableCell>
                             <TableCell>
                               <div className="flex space-x-2">
-                                <Button
-                                  variant="ghost"
+                                <Button 
+                                  variant="ghost" 
                                   size="icon"
                                   onClick={() => handleToggleFeatured(product.id, Boolean(product.featured))}
                                 >
@@ -491,15 +491,15 @@ export default function AdminProducts() {
                                     <Star className="h-4 w-4" />
                                   )}
                                 </Button>
-                                <Button
-                                  variant="ghost"
+                                <Button 
+                                  variant="ghost" 
                                   size="icon"
                                   onClick={() => setupEditForm(product)}
                                 >
                                   <Edit className="h-4 w-4" />
                                 </Button>
-                                <Button
-                                  variant="ghost"
+                                <Button 
+                                  variant="ghost" 
                                   size="icon"
                                   onClick={() => {
                                     setProductToDelete(product);
@@ -556,13 +556,13 @@ export default function AdminProducts() {
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
-              <Button
-                variant="outline"
+              <Button 
+                variant="outline" 
                 onClick={() => setIsDeleteDialogOpen(false)}
               >
                 Cancel
               </Button>
-              <Button
+              <Button 
                 variant="destructive"
                 onClick={() => productToDelete && handleDeleteProduct(productToDelete.id)}
               >
@@ -581,7 +581,7 @@ export default function AdminProducts() {
                 Update the product details. Click save when you're done.
               </DialogDescription>
             </DialogHeader>
-
+            
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField
@@ -597,7 +597,7 @@ export default function AdminProducts() {
                     </FormItem>
                   )}
                 />
-
+                
                 <FormField
                   control={form.control}
                   name="description"
@@ -611,7 +611,7 @@ export default function AdminProducts() {
                     </FormItem>
                   )}
                 />
-
+                
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
@@ -620,9 +620,9 @@ export default function AdminProducts() {
                       <FormItem>
                         <FormLabel>Price (₹)</FormLabel>
                         <FormControl>
-                          <Input
-                            type="number"
-                            step="0.01"
+                          <Input 
+                            type="number" 
+                            step="0.01" 
                             min="0"
                             {...field}
                             onChange={(e) => field.onChange(parseFloat(e.target.value))}
@@ -632,7 +632,7 @@ export default function AdminProducts() {
                       </FormItem>
                     )}
                   />
-
+                  
                   <FormField
                     control={form.control}
                     name="stockQuantity"
@@ -640,8 +640,8 @@ export default function AdminProducts() {
                       <FormItem>
                         <FormLabel>Stock Quantity</FormLabel>
                         <FormControl>
-                          <Input
-                            type="number"
+                          <Input 
+                            type="number" 
                             min="0"
                             {...field}
                             onChange={(e) => field.onChange(parseInt(e.target.value))}
@@ -652,7 +652,7 @@ export default function AdminProducts() {
                     )}
                   />
                 </div>
-
+                
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
@@ -660,8 +660,8 @@ export default function AdminProducts() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Category</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
+                        <Select 
+                          onValueChange={field.onChange} 
                           defaultValue={field.value}
                         >
                           <FormControl>
@@ -681,15 +681,15 @@ export default function AdminProducts() {
                       </FormItem>
                     )}
                   />
-
+                  
                   <FormField
                     control={form.control}
                     name="farmerId"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Farmer</FormLabel>
-                        <Select
-                          onValueChange={(value) => field.onChange(parseInt(value))}
+                        <Select 
+                          onValueChange={(value) => field.onChange(parseInt(value))} 
                           defaultValue={field.value.toString()}
                         >
                           <FormControl>
@@ -710,7 +710,7 @@ export default function AdminProducts() {
                     )}
                   />
                 </div>
-
+                
                 <FormField
                   control={form.control}
                   name="imageUrl"
@@ -724,7 +724,7 @@ export default function AdminProducts() {
                     </FormItem>
                   )}
                 />
-
+                
                 <FormField
                   control={form.control}
                   name="featured"
@@ -747,7 +747,7 @@ export default function AdminProducts() {
                     </FormItem>
                   )}
                 />
-
+                
                 <DialogFooter>
                   <Button type="submit">Save Changes</Button>
                 </DialogFooter>
@@ -765,7 +765,7 @@ export default function AdminProducts() {
                 Add a new product to your catalog.
               </DialogDescription>
             </DialogHeader>
-
+            
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField
@@ -781,7 +781,7 @@ export default function AdminProducts() {
                     </FormItem>
                   )}
                 />
-
+                
                 <FormField
                   control={form.control}
                   name="description"
@@ -795,7 +795,7 @@ export default function AdminProducts() {
                     </FormItem>
                   )}
                 />
-
+                
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
@@ -804,9 +804,9 @@ export default function AdminProducts() {
                       <FormItem>
                         <FormLabel>Price (₹)</FormLabel>
                         <FormControl>
-                          <Input
-                            type="number"
-                            step="0.01"
+                          <Input 
+                            type="number" 
+                            step="0.01" 
                             min="0"
                             {...field}
                             onChange={(e) => field.onChange(parseFloat(e.target.value))}
@@ -816,7 +816,7 @@ export default function AdminProducts() {
                       </FormItem>
                     )}
                   />
-
+                  
                   <FormField
                     control={form.control}
                     name="stockQuantity"
@@ -824,8 +824,8 @@ export default function AdminProducts() {
                       <FormItem>
                         <FormLabel>Stock Quantity</FormLabel>
                         <FormControl>
-                          <Input
-                            type="number"
+                          <Input 
+                            type="number" 
                             min="0"
                             {...field}
                             onChange={(e) => field.onChange(parseInt(e.target.value))}
@@ -836,7 +836,7 @@ export default function AdminProducts() {
                     )}
                   />
                 </div>
-
+                
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
@@ -844,8 +844,8 @@ export default function AdminProducts() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Category</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
+                        <Select 
+                          onValueChange={field.onChange} 
                           defaultValue={field.value}
                         >
                           <FormControl>
@@ -865,15 +865,15 @@ export default function AdminProducts() {
                       </FormItem>
                     )}
                   />
-
+                  
                   <FormField
                     control={form.control}
                     name="farmerId"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Farmer</FormLabel>
-                        <Select
-                          onValueChange={(value) => field.onChange(parseInt(value))}
+                        <Select 
+                          onValueChange={(value) => field.onChange(parseInt(value))} 
                           defaultValue={field.value.toString()}
                         >
                           <FormControl>
@@ -894,7 +894,7 @@ export default function AdminProducts() {
                     )}
                   />
                 </div>
-
+                
                 <FormField
                   control={form.control}
                   name="imageUrl"
@@ -908,7 +908,7 @@ export default function AdminProducts() {
                     </FormItem>
                   )}
                 />
-
+                
                 <FormField
                   control={form.control}
                   name="featured"
@@ -931,7 +931,7 @@ export default function AdminProducts() {
                     </FormItem>
                   )}
                 />
-
+                
                 <DialogFooter>
                   <Button type="submit">Create Product</Button>
                 </DialogFooter>

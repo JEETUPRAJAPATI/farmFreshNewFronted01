@@ -22,7 +22,7 @@ function TeamMembersAdmin() {
   const queryClient = useQueryClient();
 
   const { data: teamMembers, isLoading } = useQuery<TeamMember[]>({
-    queryKey: [`${import.meta.env.VITE_API_URL}/api/admin/team-members`],
+    queryKey: ["/api/admin/team-members"],
   });
 
   const createForm = useForm<InsertTeamMember>({
@@ -51,14 +51,14 @@ function TeamMembersAdmin() {
 
   const createMutation = useMutation({
     mutationFn: async (data: InsertTeamMember) => {
-      return await apiRequest(`${import.meta.env.VITE_API_URL}/api/admin/team-members`, {
+      return await apiRequest("/api/admin/team-members", {
         method: "POST",
         body: JSON.stringify(data),
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/admin/team-members`] });
-      queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/team-members`] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/team-members"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/team-members"] });
       setIsCreateDialogOpen(false);
       createForm.reset();
       toast({
@@ -77,14 +77,14 @@ function TeamMembersAdmin() {
 
   const updateMutation = useMutation({
     mutationFn: async ({ id, data }: { id: number; data: Partial<InsertTeamMember> }) => {
-      return await apiRequest(`${import.meta.env.VITE_API_URL}/api/admin/team-members/${id}`, {
+      return await apiRequest(`/api/admin/team-members/${id}`, {
         method: "PUT",
         body: JSON.stringify(data),
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/admin/team-members`] });
-      queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/team-members`] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/team-members"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/team-members"] });
       setEditingMember(null);
       editForm.reset();
       toast({
@@ -103,13 +103,13 @@ function TeamMembersAdmin() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
-      return await apiRequest(`${import.meta.env.VITE_API_URL}/api/admin/team-members/${id}`, {
+      return await apiRequest(`/api/admin/team-members/${id}`, {
         method: "DELETE",
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/admin/team-members`] });
-      queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/team-members`] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/team-members"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/team-members"] });
       toast({
         title: "Success",
         description: "Team member deleted successfully",
@@ -246,10 +246,10 @@ function TeamMembersAdmin() {
                     <FormItem>
                       <FormLabel>Display Order</FormLabel>
                       <FormControl>
-                        <Input
-                          type="number"
-                          placeholder="0"
-                          {...field}
+                        <Input 
+                          type="number" 
+                          placeholder="0" 
+                          {...field} 
                           onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
                         />
                       </FormControl>
@@ -307,8 +307,8 @@ function TeamMembersAdmin() {
                   <CardDescription>{member.jobTitle}</CardDescription>
                   <div className="flex items-center space-x-2 mt-2">
                     <span className={`px-2 py-1 text-xs rounded-full ${
-                      member.isActive
-                        ? "bg-green-100 text-green-800"
+                      member.isActive 
+                        ? "bg-green-100 text-green-800" 
                         : "bg-gray-100 text-gray-800"
                     }`}>
                       {member.isActive ? "Active" : "Inactive"}
@@ -415,10 +415,10 @@ function TeamMembersAdmin() {
                   <FormItem>
                     <FormLabel>Display Order</FormLabel>
                     <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="0"
-                        {...field}
+                      <Input 
+                        type="number" 
+                        placeholder="0" 
+                        {...field} 
                         onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
                       />
                     </FormControl>

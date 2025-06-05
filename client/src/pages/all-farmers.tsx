@@ -9,7 +9,7 @@ import { useAnimations } from "@/hooks/use-animations";
 export default function AllFarmers() {
   // Get all farmers data
   const { data: farmers = [], isLoading } = useQuery({
-    queryKey: [`${import.meta.env.VITE_API_URL}/api/farmers`],
+    queryKey: ["/api/farmers"],
   });
 
   // Animation controller

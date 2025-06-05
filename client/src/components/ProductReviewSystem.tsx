@@ -35,13 +35,13 @@ export default function ProductReviewSystem({ productId }: ProductReviewSystemPr
 
   // Check if the user can review this product (if they've purchased and received it)
   const { data: canReview, isLoading: checkingEligibility } = useQuery({
-    queryKey: [`${import.meta.env.VITE_API_URL}/api/products/${productId}/can-review`],
+    queryKey: [`/api/products/${productId}/can-review`],
     enabled: !!productId && !!userId,
   });
 
   // Fetch existing reviews for this product
   const { data: reviews, isLoading: loadingReviews } = useQuery({
-    queryKey: [`${import.meta.env.VITE_API_URL}/api/products/${productId}/reviews`],
+    queryKey: [`/api/products/${productId}/reviews`],
     enabled: !!productId,
   });
 
@@ -69,7 +69,7 @@ export default function ProductReviewSystem({ productId }: ProductReviewSystemPr
   // Set up the mutation to submit the review
   const mutation = useMutation({
     mutationFn: async (data: ReviewFormData) => {
-      return apiRequest(`${import.meta.env.VITE_API_URL}/api/products/${productId}/reviews`, {
+      return apiRequest(`/api/products/${productId}/reviews`, {
         method: "POST",
         body: JSON.stringify(data)
       });
@@ -81,21 +81,21 @@ export default function ProductReviewSystem({ productId }: ProductReviewSystemPr
         description: "Thank you for sharing your feedback.",
         variant: "default"
       });
-
+      
       // Reset the form
       reset();
-
+      
       // Show success state
       setIsSuccess(true);
-
+      
       // Hide success state after 5 seconds
       setTimeout(() => {
         setIsSuccess(false);
       }, 5000);
-
+      
       // Invalidate the cache to refresh the reviews
-      queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/products/${productId}/reviews`] });
-      queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/products/${productId}/can-review`] });
+      queryClient.invalidateQueries({ queryKey: [`/api/products/${productId}/reviews`] });
+      queryClient.invalidateQueries({ queryKey: [`/api/products/${productId}/can-review`] });
     },
     onError: (error) => {
       // Show error message
@@ -122,7 +122,7 @@ export default function ProductReviewSystem({ productId }: ProductReviewSystemPr
   // Calculate average rating from reviews
   const calculateAverageRating = () => {
     if (!reviews || !Array.isArray(reviews) || reviews.length === 0) return 0;
-
+    
     const totalRating = reviews.reduce((acc: number, review: any) => acc + review.rating, 0);
     return totalRating / reviews.length;
   };
@@ -136,21 +136,21 @@ export default function ProductReviewSystem({ productId }: ProductReviewSystemPr
     const stars = [];
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
-
+    
     // Add full stars
     for (let i = 0; i < fullStars; i++) {
       stars.push(
         <Star key={`full-${i}`} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
       );
     }
-
+    
     // Add half star if needed
     if (hasHalfStar) {
       stars.push(
         <StarHalf key="half" className="h-5 w-5 fill-yellow-400 text-yellow-400" />
       );
     }
-
+    
     // Add empty stars
     const emptyStars = 5 - Math.ceil(rating);
     for (let i = 0; i < emptyStars; i++) {
@@ -158,7 +158,7 @@ export default function ProductReviewSystem({ productId }: ProductReviewSystemPr
         <Star key={`empty-${i}`} className="h-5 w-5 text-gray-300" />
       );
     }
-
+    
     return stars;
   };
 
@@ -169,7 +169,7 @@ export default function ProductReviewSystem({ productId }: ProductReviewSystemPr
   return (
     <div className="mt-8 border-t pt-8">
       <h2 className="text-2xl font-bold mb-4">Customer Reviews</h2>
-
+      
       {/* Display comprehensive rating summary */}
       {!loadingReviews && reviews && Array.isArray(reviews) && reviews.length > 0 && (
         <div className="bg-background p-6 rounded-lg mb-8 border">
@@ -186,20 +186,20 @@ export default function ProductReviewSystem({ productId }: ProductReviewSystemPr
                 </div>
               </div>
             </div>
-
+            
             {/* Rating Breakdown */}
             <div className="space-y-2">
               {[5, 4, 3, 2, 1].map((starCount) => {
                 const count = reviews.filter((review: any) => review.rating === starCount).length;
                 const percentage = reviews.length > 0 ? (count / reviews.length) * 100 : 0;
-
+                
                 return (
                   <div key={starCount} className="flex items-center space-x-2 text-sm">
                     <span className="w-2">{starCount}</span>
                     <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                     <div className="flex-1 bg-gray-200 rounded-full h-2">
-                      <div
-                        className="bg-yellow-400 h-2 rounded-full transition-all duration-300"
+                      <div 
+                        className="bg-yellow-400 h-2 rounded-full transition-all duration-300" 
                         style={{ width: `${percentage}%` }}
                       />
                     </div>
@@ -234,7 +234,7 @@ export default function ProductReviewSystem({ productId }: ProductReviewSystemPr
                       className="focus:outline-none"
                       aria-label={`Rate ${rating} stars`}
                     >
-                      <Star
+                      <Star 
                         className={`h-8 w-8 cursor-pointer ${
                           currentRating >= rating
                             ? "fill-yellow-400 text-yellow-400"
@@ -248,7 +248,7 @@ export default function ProductReviewSystem({ productId }: ProductReviewSystemPr
                   <p className="text-sm text-red-500">{errors.rating.message}</p>
                 )}
               </div>
-
+              
               <div className="space-y-2">
                 <label htmlFor="review" className="block text-sm font-medium">Your Review</label>
                 <Textarea
@@ -262,7 +262,7 @@ export default function ProductReviewSystem({ productId }: ProductReviewSystemPr
                   <p className="text-sm text-red-500">{errors.review.message}</p>
                 )}
               </div>
-
+              
               <Button
                 type="submit"
                 disabled={isSubmitting || mutation.isPending}
@@ -282,7 +282,7 @@ export default function ProductReviewSystem({ productId }: ProductReviewSystemPr
             ? "Customer Reviews"
             : "No reviews yet"}
         </h3>
-
+        
         {loadingReviews ? (
           <div className="animate-pulse space-y-4">
             <div className="h-20 bg-gray-200 rounded"></div>

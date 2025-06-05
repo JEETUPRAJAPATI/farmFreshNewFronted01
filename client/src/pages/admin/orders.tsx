@@ -113,7 +113,7 @@ export default function AdminOrders() {
         throw new Error('Authentication required');
       }
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/orders/${orderId}/details`, {
+      const response = await fetch(`/api/admin/orders/${orderId}/details`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -148,37 +148,37 @@ export default function AdminOrders() {
   const fetchOrders = async (page = 1, search = '', status = '') => {
     setIsLoading(true);
     setError(null);
-
+    
     try {
       const token = localStorage.getItem('adminToken');
       if (!token) {
         throw new Error('Authentication required');
       }
-
+      
       const params = new URLSearchParams({
         page: page.toString(),
         limit: ordersPerPage.toString(),
         sort: 'createdAt',
         order: 'desc'
       });
-
+      
       if (search) {
         params.append('search', search);
       }
       if (status && status !== 'all') {
         params.append('status', status);
       }
-
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/orders?${params}`, {
+      
+      const response = await fetch(`/api/admin/orders?${params}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
-
+      
       if (!response.ok) {
         throw new Error('Failed to fetch orders');
       }
-
+      
       const data: OrdersResponse = await response.json();
       setOrders(data.orders);
       setTotalPages(data.pagination.totalPages);
@@ -216,8 +216,8 @@ export default function AdminOrders() {
       if (!token) {
         throw new Error('Authentication required');
       }
-
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/orders/${orderId}/status`, {
+      
+      const response = await fetch(`/api/admin/orders/${orderId}/status`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -225,14 +225,14 @@ export default function AdminOrders() {
         },
         body: JSON.stringify({ status: newStatus })
       });
-
+      
       if (!response.ok) {
         throw new Error('Failed to update order status');
       }
-
+      
       // Refresh orders list
       fetchOrders(currentPage, searchTerm, statusFilter);
-
+      
       toast({
         title: "Order status updated",
         description: `Order ${orderId} has been updated to ${newStatus}.`,
@@ -252,7 +252,7 @@ export default function AdminOrders() {
       if (!token) {
         throw new Error('Authentication required');
       }
-
+      
       // Here you would implement CSV export functionality
       toast({
         title: "Export started",
@@ -317,8 +317,8 @@ export default function AdminOrders() {
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
                   </div>
-                  <Select
-                    value={statusFilter}
+                  <Select 
+                    value={statusFilter} 
                     onValueChange={setStatusFilter}
                   >
                     <SelectTrigger className="w-full sm:w-40">
@@ -382,7 +382,7 @@ export default function AdminOrders() {
                               <TableCell>{formatCurrency(order.total)}</TableCell>
                               <TableCell className="capitalize">{order.paymentMethod}</TableCell>
                               <TableCell>
-                                <Badge
+                                <Badge 
                                   className={getStatusBadgeClass(order.status)}
                                   variant="secondary"
                                 >
@@ -391,16 +391,16 @@ export default function AdminOrders() {
                               </TableCell>
                               <TableCell>
                                 <div className="flex space-x-2">
-                                  <Button
-                                    variant="ghost"
+                                  <Button 
+                                    variant="ghost" 
                                     size="icon"
                                     onClick={() => handleViewOrderDetails(order.id)}
                                     title="View Order Details"
                                   >
                                     <Eye className="h-4 w-4" />
                                   </Button>
-                                  <Button
-                                    variant="ghost"
+                                  <Button 
+                                    variant="ghost" 
                                     size="icon"
                                     onClick={() => setPrintStickerOrder(order)}
                                     title="Print Delivery Sticker"
@@ -416,7 +416,7 @@ export default function AdminOrders() {
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end">
                                       {ORDER_STATUSES.filter(status => status.value !== 'all').map((status) => (
-                                        <DropdownMenuItem
+                                        <DropdownMenuItem 
                                           key={status.value}
                                           onClick={() => handleUpdateStatus(order.id, status.value)}
                                           disabled={order.status === status.value}
@@ -439,9 +439,9 @@ export default function AdminOrders() {
                   {totalPages > 1 && (
                     <div className="flex justify-center mt-6">
                       <div className="flex items-center space-x-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
                           onClick={() => handlePageChange(currentPage - 1)}
                           disabled={currentPage === 1}
                         >
@@ -450,9 +450,9 @@ export default function AdminOrders() {
                         <span className="text-sm text-muted-foreground">
                           Page {currentPage} of {totalPages}
                         </span>
-                        <Button
-                          variant="outline"
-                          size="sm"
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
                           onClick={() => handlePageChange(currentPage + 1)}
                           disabled={currentPage === totalPages}
                         >
@@ -475,7 +475,7 @@ export default function AdminOrders() {
               <DialogHeader>
                 <DialogTitle>Order Details #{selectedOrder}</DialogTitle>
               </DialogHeader>
-
+              
               {orderDetailsLoading ? (
                 <div className="flex justify-center py-8">
                   <Loader2 className="h-8 w-8 animate-spin" />
@@ -494,7 +494,7 @@ export default function AdminOrders() {
                         </Badge>
                       </CardContent>
                     </Card>
-
+                    
                     <Card>
                       <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-medium">Order Total</CardTitle>
@@ -503,7 +503,7 @@ export default function AdminOrders() {
                         <div className="text-2xl font-bold">₹{selectedOrderDetails.total}</div>
                       </CardContent>
                     </Card>
-
+                    
                     <Card>
                       <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-medium">Order Date</CardTitle>

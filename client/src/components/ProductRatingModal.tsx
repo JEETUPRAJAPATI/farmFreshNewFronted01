@@ -15,12 +15,12 @@ interface ProductRatingModalProps {
   productName: string;
 }
 
-export default function ProductRatingModal({
-  isOpen,
-  onClose,
-  orderId,
-  productId,
-  productName
+export default function ProductRatingModal({ 
+  isOpen, 
+  onClose, 
+  orderId, 
+  productId, 
+  productName 
 }: ProductRatingModalProps) {
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
@@ -30,7 +30,7 @@ export default function ProductRatingModal({
 
   const submitRatingMutation = useMutation({
     mutationFn: async (data: { rating: number; reviewText: string }) => {
-      return apiRequest(`${import.meta.env.VITE_API_URL}/api/orders/${orderId}/rate-product`, {
+      return apiRequest(`/api/orders/${orderId}/rate-product`, {
         method: 'POST',
         body: JSON.stringify({
           productId,
@@ -44,11 +44,11 @@ export default function ProductRatingModal({
         title: 'Rating Submitted',
         description: 'Thank you for your feedback!'
       });
-
+      
       // Invalidate queries to refresh data
-      queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/orders/delivered`] });
-      queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/products/${productId}/reviews`] });
-
+      queryClient.invalidateQueries({ queryKey: ['/api/orders/delivered'] });
+      queryClient.invalidateQueries({ queryKey: [`/api/products/${productId}/reviews`] });
+      
       // Reset form and close modal
       setRating(0);
       setReviewText('');
@@ -80,7 +80,7 @@ export default function ProductRatingModal({
     return Array.from({ length: 5 }, (_, index) => {
       const starValue = index + 1;
       const isActive = starValue <= (hoveredRating || rating);
-
+      
       return (
         <button
           key={index}
@@ -105,7 +105,7 @@ export default function ProductRatingModal({
             How was your experience with <strong>{productName}</strong>?
           </DialogDescription>
         </DialogHeader>
-
+        
         <div className="space-y-6 py-4">
           {/* Star Rating */}
           <div className="text-center">
@@ -139,7 +139,7 @@ export default function ProductRatingModal({
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
-          <Button
+          <Button 
             onClick={handleSubmit}
             disabled={submitRatingMutation.isPending || rating === 0}
           >

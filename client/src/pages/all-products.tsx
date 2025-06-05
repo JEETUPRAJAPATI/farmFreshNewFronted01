@@ -22,21 +22,21 @@ export default function AllProducts() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("category");
   const searchParam = searchParams.get("search");
-
+  
   // State for filters
   const [searchQuery, setSearchQuery] = useState(searchParam || "");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(categoryParam);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 20]);
   const [showFilters, setShowFilters] = useState(false);
-
+  
   // Get all products
-  const { data: allProducts = [], isLoading } = useQuery({
-    queryKey: [`${import.meta.env.VITE_API_URL}/api/products`]
+  const { data: allProducts = [], isLoading } = useQuery({ 
+    queryKey: ['/api/products'] 
   });
-
+  
   // Set up animations
   const { setupScrollAnimation } = useAnimations();
-
+  
   useEffect(() => {
     setupScrollAnimation();
   }, []);
@@ -52,22 +52,22 @@ export default function AllProducts() {
       }
     }
   }, [searchParam]);
-
+  
   // Filter products
   const filteredProducts = allProducts.filter((product: Product) => {
     // Filter by search query
-    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           product.description.toLowerCase().includes(searchQuery.toLowerCase());
-
+    
     // Filter by category
     const matchesCategory = !selectedCategory || product.category === selectedCategory;
-
+    
     // Filter by price range
     const matchesPrice = product.price >= priceRange[0] && product.price <= priceRange[1];
-
+    
     return matchesSearch && matchesCategory && matchesPrice;
   });
-
+  
   // Categories for filter
   const categories = [
     { id: "all", name: "All Products", value: null },
@@ -76,23 +76,23 @@ export default function AllProducts() {
     { id: "grains", name: "Grains", value: ProductCategory.GRAINS },
     { id: "others", name: "Others", value: ProductCategory.OTHERS }
   ];
-
+  
   // Debounced search handler
   const handleSearchChange = debounce((value: string) => {
     setSearchQuery(value);
   }, 300);
-
+  
   // Reset filters
   const resetFilters = () => {
     setSearchQuery("");
     setSelectedCategory(null);
     setPriceRange([0, 20]);
-
+    
     // Reset input field
     const searchInput = document.getElementById("product-search") as HTMLInputElement;
     if (searchInput) searchInput.value = "";
   };
-
+  
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-32 flex justify-center">
@@ -107,22 +107,22 @@ export default function AllProducts() {
       </div>
     );
   }
-
+  
   return (
     <div className="bg-background pt-32 pb-16">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h1 className="font-heading text-forest text-4xl font-bold mb-4">Our Products</h1>
           <p className="text-olive text-lg max-w-2xl mx-auto">
-            Explore our complete collection of farm-fresh products, each grown with care using traditional methods.
+            Explore our complete collection of farm-fresh products, each grown with care using traditional methods. 
             Filter by category to find exactly what you're looking for.
           </p>
         </div>
-
+        
         {/* Mobile filter toggle */}
         <div className="lg:hidden flex justify-end mb-6">
-          <Button
-            variant="outline"
+          <Button 
+            variant="outline" 
             className="flex items-center gap-2"
             onClick={() => setShowFilters(!showFilters)}
           >
@@ -130,7 +130,7 @@ export default function AllProducts() {
             {showFilters ? "Hide Filters" : "Show Filters"}
           </Button>
         </div>
-
+        
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Filters Sidebar */}
           <AnimatePresence>
@@ -145,16 +145,16 @@ export default function AllProducts() {
                 <div className="bg-white p-6 rounded-lg shadow-sm sticky top-32">
                   <div className="flex justify-between items-center mb-6">
                     <h2 className="font-heading text-forest text-xl font-semibold">Filters</h2>
-                    <Button
-                      variant="ghost"
-                      size="sm"
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
                       onClick={resetFilters}
                       className="text-primary hover:text-primary-dark"
                     >
                       Reset All
                     </Button>
                   </div>
-
+                  
                   {/* Search */}
                   <div className="mb-8">
                     <Label htmlFor="product-search" className="text-foreground font-medium mb-2 block">
@@ -171,7 +171,7 @@ export default function AllProducts() {
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     </div>
                   </div>
-
+                  
                   {/* Categories */}
                   <div className="mb-8">
                     <h3 className="text-foreground font-medium mb-3">Categories</h3>
@@ -193,7 +193,7 @@ export default function AllProducts() {
                       ))}
                     </div>
                   </div>
-
+                  
                   {/* Price Range */}
                   <div>
                     <h3 className="text-foreground font-medium mb-3">Price Range</h3>
@@ -215,7 +215,7 @@ export default function AllProducts() {
               </motion.div>
             )}
           </AnimatePresence>
-
+          
           {/* Products Grid */}
           <div className="lg:col-span-3">
             {filteredProducts.length > 0 ? (
@@ -226,7 +226,7 @@ export default function AllProducts() {
                   </p>
                   {/* Could add sorting options here */}
                 </div>
-
+                
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                   {filteredProducts.map((product) => (
                     <div key={product.id} className="scroll-animation">
@@ -234,18 +234,18 @@ export default function AllProducts() {
                     </div>
                   ))}
                 </div>
-
+                
                 {/* Pagination - would implement with real API */}
                 <div className="mt-12 flex justify-center">
                   <div className="flex items-center space-x-2">
-                    <Button
-                      variant="outline"
+                    <Button 
+                      variant="outline" 
                       size="icon"
                       disabled
                     >
                       <ArrowLeft className="h-4 w-4" />
                     </Button>
-                    <Button
+                    <Button 
                       variant="outline"
                       className="bg-primary text-white hover:bg-primary-dark"
                     >
@@ -253,8 +253,8 @@ export default function AllProducts() {
                     </Button>
                     <Button variant="outline">2</Button>
                     <Button variant="outline">3</Button>
-                    <Button
-                      variant="outline"
+                    <Button 
+                      variant="outline" 
                       size="icon"
                     >
                       <ArrowRight className="h-4 w-4" />
@@ -271,8 +271,8 @@ export default function AllProducts() {
                 <p className="text-muted-foreground mb-6">
                   We couldn't find any products matching your criteria.
                 </p>
-                <Button
-                  variant="outline"
+                <Button 
+                  variant="outline" 
                   onClick={resetFilters}
                 >
                   Reset Filters

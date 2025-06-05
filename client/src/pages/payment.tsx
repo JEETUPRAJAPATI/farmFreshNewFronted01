@@ -35,7 +35,7 @@ export default function Payment() {
     const amount = Number(searchParams.get('amount')) || 100;
     const currency = searchParams.get('currency') || 'INR';
     const description = searchParams.get('description') || 'Purchase from Farm to Table';
-
+    
     setOrderDetails({
       amount,
       currency,
@@ -81,29 +81,29 @@ export default function Payment() {
 
     try {
       setIsLoading(true);
-
+      
       // Make sure Razorpay is loaded
       if (typeof window.Razorpay === 'undefined') {
         // Try loading it again
         const script = document.createElement('script');
         script.src = 'https://checkout.razorpay.com/v1/checkout.js';
         document.body.appendChild(script);
-
+        
         // Wait for script to load
         await new Promise((resolve) => {
           script.onload = resolve;
           // If script fails to load in 5 seconds, continue anyway
           setTimeout(resolve, 5000);
         });
-
+        
         // Check again
         if (typeof window.Razorpay === 'undefined') {
           throw new Error('Razorpay SDK failed to load. Please refresh the page and try again.');
         }
       }
-
+      
       // Initialize payment with the server
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/payments/initialize`, {
+      const response = await fetch('/api/payments/initialize', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -123,7 +123,7 @@ export default function Payment() {
 
       const data = await response.json();
       console.log('Payment initialization successful:', data);
-
+      
       // Configure Razorpay options
       const options = {
         key: data.keyId,
@@ -135,7 +135,7 @@ export default function Payment() {
         handler: async function (response: any) {
           try {
             // Verify payment with the server
-            const verifyResponse = await apiRequest(`${import.meta.env.VITE_API_URL}/api/payments/verify`, {
+            const verifyResponse = await apiRequest('/api/payments/verify', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -158,14 +158,14 @@ export default function Payment() {
             }
 
             const verifyData = await verifyResponse.json();
-
+            
             // Clear the cart from frontend context
             await clearCart();
-
+            
             // Invalidate cart and order history queries
-            queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/cart`] });
-            queryClient.invalidateQueries({ queryKey: [`${import.meta.env.VITE_API_URL}/api/orders/history`] });
-
+            queryClient.invalidateQueries({ queryKey: ['/api/cart'] });
+            queryClient.invalidateQueries({ queryKey: ['/api/orders/history'] });
+            
             toast({
               title: 'Payment Successful',
               description: 'Your payment has been processed successfully.'
@@ -173,14 +173,14 @@ export default function Payment() {
 
             // Redirect to success page
             navigate('/payment-success');
-
+            
           } catch (error) {
             console.error('Payment verification error:', error);
             let errorMessage = 'Payment verification failed';
             if (error instanceof Error) {
               errorMessage = error.message;
             }
-
+            
             toast({
               title: 'Payment Error',
               description: errorMessage,
@@ -210,14 +210,14 @@ export default function Payment() {
           variant: 'destructive'
         });
       }
-
+      
     } catch (error) {
       console.error('Payment initialization error:', error);
       let errorMessage = 'Failed to initialize payment';
       if (error instanceof Error) {
         errorMessage = error.message;
       }
-
+      
       toast({
         title: 'Payment Error',
         description: errorMessage,
@@ -259,7 +259,7 @@ export default function Payment() {
                   </div>
                 </div>
               </div>
-
+              
               <div className="text-sm text-gray-500">
                 <p>
                   Your payment is secured by Razorpay. We do not store your payment details.
@@ -268,8 +268,8 @@ export default function Payment() {
             </div>
           </CardContent>
           <CardFooter>
-            <Button
-              className="w-full"
+            <Button 
+              className="w-full" 
               onClick={handlePayment}
               disabled={isLoading}
             >

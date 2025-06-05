@@ -12,7 +12,7 @@ export default function Footer() {
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     if (!email) {
       toast({
         title: "Email required",
@@ -33,7 +33,7 @@ export default function Footer() {
 
     setIsSubmitting(true);
     try {
-      await apiRequest(`${import.meta.env.VITE_API_URL}/api/newsletter/subscribe`, {
+      await apiRequest("/api/newsletter/subscribe", {
         method: "POST",
         body: JSON.stringify({
           email,
@@ -43,12 +43,12 @@ export default function Footer() {
           "Content-Type": "application/json",
         },
       });
-
+      
       toast({
         title: "Subscription successful!",
         description: "Thank you for joining our newsletter.",
       });
-
+      
       setEmail("");
     } catch (error) {
       toast({
@@ -68,8 +68,8 @@ export default function Footer() {
           <div>
             <div className="flex items-center space-x-3 mb-6">
               {settings.siteLogo && (
-                <img
-                  src={settings.siteLogo}
+                <img 
+                  src={settings.siteLogo} 
                   alt={settings.siteName}
                   className="h-8 w-8 object-contain"
                 />
@@ -84,9 +84,9 @@ export default function Footer() {
             <div className="flex space-x-5 mt-4">
               {/* Dynamic Social Links */}
               {settings.socialLinks.facebook && (
-                <a
-                  href={settings.socialLinks.facebook}
-                  target="_blank"
+                <a 
+                  href={settings.socialLinks.facebook} 
+                  target="_blank" 
                   rel="noopener noreferrer"
                   className="text-white hover:text-[#DDA15E] transition-all duration-300"
                 >
@@ -94,9 +94,9 @@ export default function Footer() {
                 </a>
               )}
               {settings.socialLinks.instagram && (
-                <a
-                  href={settings.socialLinks.instagram}
-                  target="_blank"
+                <a 
+                  href={settings.socialLinks.instagram} 
+                  target="_blank" 
                   rel="noopener noreferrer"
                   className="text-white hover:text-[#DDA15E] transition-all duration-300"
                 >
@@ -104,9 +104,9 @@ export default function Footer() {
                 </a>
               )}
               {settings.socialLinks.twitter && (
-                <a
-                  href={settings.socialLinks.twitter}
-                  target="_blank"
+                <a 
+                  href={settings.socialLinks.twitter} 
+                  target="_blank" 
                   rel="noopener noreferrer"
                   className="text-white hover:text-[#DDA15E] transition-all duration-300"
                 >
@@ -114,9 +114,9 @@ export default function Footer() {
                 </a>
               )}
               {settings.socialLinks.linkedin && (
-                <a
-                  href={settings.socialLinks.linkedin}
-                  target="_blank"
+                <a 
+                  href={settings.socialLinks.linkedin} 
+                  target="_blank" 
                   rel="noopener noreferrer"
                   className="text-white hover:text-[#DDA15E] transition-all duration-300"
                 >
@@ -124,9 +124,9 @@ export default function Footer() {
                 </a>
               )}
               {settings.socialLinks.youtube && (
-                <a
-                  href={settings.socialLinks.youtube}
-                  target="_blank"
+                <a 
+                  href={settings.socialLinks.youtube} 
+                  target="_blank" 
                   rel="noopener noreferrer"
                   className="text-white hover:text-[#DDA15E] transition-all duration-300"
                 >
@@ -134,9 +134,9 @@ export default function Footer() {
                 </a>
               )}
               {settings.socialLinks.website && (
-                <a
-                  href={settings.socialLinks.website}
-                  target="_blank"
+                <a 
+                  href={settings.socialLinks.website} 
+                  target="_blank" 
                   rel="noopener noreferrer"
                   className="text-white hover:text-[#DDA15E] transition-all duration-300"
                 >
@@ -264,15 +264,15 @@ export default function Footer() {
             <h4 className="text-white font-bold text-xl mb-4">Join Our Newsletter</h4>
             <p className="text-white/80 mb-6">Get updates on new arrivals, seasonal harvest news, and exclusive offers.</p>
             <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3 w-full max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="Your email address"
+              <input 
+                type="email" 
+                placeholder="Your email address" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="bg-white/10 border border-white/20 text-white placeholder-white/60 rounded-md py-3 px-4 flex-grow focus:outline-none focus:ring-2 focus:ring-[#DDA15E]"
                 required
               />
-              <button
+              <button 
                 type="submit"
                 disabled={isSubmitting}
                 className="bg-[#DDA15E] hover:bg-[#DDA15E]/90 disabled:bg-[#DDA15E]/50 text-white font-semibold py-3 px-6 rounded-md transition-all duration-300"
@@ -282,7 +282,7 @@ export default function Footer() {
             </form>
           </div>
         </div>
-
+        
 
 
         {/* Copyright */}

@@ -85,19 +85,19 @@ export default function AdminUsers() {
     try {
       setIsLoading(true);
       setError(null);
-
+      
       const token = localStorage.getItem('adminToken');
       if (!token) {
         throw new Error('No authentication token found');
       }
-
+      
       const params = new URLSearchParams({
         page: currentPage.toString(),
         limit: usersPerPage.toString(),
         sort: 'createdAt',
         order: 'desc'
       });
-
+      
       if (searchTerm) {
         params.append('search', searchTerm);
       }
@@ -108,8 +108,8 @@ export default function AdminUsers() {
           params.append('status', 'unverified');
         }
       }
-
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/users?${params}`, {
+      
+      const response = await fetch(`/api/admin/users?${params}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -145,8 +145,8 @@ export default function AdminUsers() {
       if (!user) return;
 
       const newEmailVerified = !user.emailVerified;
-
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/users/${userId}`, {
+      
+      const response = await fetch(`/api/admin/users/${userId}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -163,12 +163,12 @@ export default function AdminUsers() {
 
       // Refresh the users list
       await fetchUsers();
-
+      
       toast({
         title: `User ${newEmailVerified ? 'activated' : 'deactivated'}`,
         description: `${user.name} has been ${newEmailVerified ? 'activated' : 'deactivated'} successfully.`,
       });
-
+      
       setIsBlockDialogOpen(false);
     } catch (error) {
       console.error('Error updating user status:', error);
@@ -220,8 +220,8 @@ export default function AdminUsers() {
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
-                <Select
-                  value={statusFilter}
+                <Select 
+                  value={statusFilter} 
                   onValueChange={setStatusFilter}
                 >
                   <SelectTrigger className="w-full sm:w-40">
@@ -274,10 +274,10 @@ export default function AdminUsers() {
                           </div>
                         </TableCell>
                         <TableCell>
-                          <span
+                          <span 
                             className={`inline-block px-2 py-1 text-xs rounded-full ${
-                              user.emailVerified
-                                ? 'bg-green-100 text-green-800'
+                              user.emailVerified 
+                                ? 'bg-green-100 text-green-800' 
                                 : 'bg-red-100 text-red-800'
                             }`}
                           >
@@ -290,15 +290,15 @@ export default function AdminUsers() {
                         <TableCell>${user.totalSpent.toFixed(2)}</TableCell>
                         <TableCell>
                           <div className="flex space-x-2">
-                            <Button
-                              variant="ghost"
+                            <Button 
+                              variant="ghost" 
                               size="icon"
                               onClick={() => openViewDialog(user)}
                             >
                               <Eye className="h-4 w-4" />
                             </Button>
-                            <Button
-                              variant="ghost"
+                            <Button 
+                              variant="ghost" 
                               size="icon"
                               onClick={() => openBlockDialog(user)}
                             >
@@ -321,9 +321,9 @@ export default function AdminUsers() {
             {totalPages > 1 && (
               <div className="flex justify-center mt-6">
                 <div className="flex items-center space-x-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
                     onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                     disabled={currentPage === 1}
                   >
@@ -332,9 +332,9 @@ export default function AdminUsers() {
                   <span className="text-sm text-muted-foreground">
                     Page {currentPage} of {totalPages}
                   </span>
-                  <Button
-                    variant="outline"
-                    size="sm"
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
                     onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                     disabled={currentPage === totalPages}
                   >
@@ -368,15 +368,15 @@ export default function AdminUsers() {
                   {selectedUser.email}
                 </div>
               </div>
-
+              
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm text-muted-foreground">Status</p>
                   <p className="font-medium">
-                    <span
+                    <span 
                       className={`inline-block px-2 py-1 text-xs rounded-full ${
-                        selectedUser.emailVerified
-                          ? 'bg-green-100 text-green-800'
+                        selectedUser.emailVerified 
+                          ? 'bg-green-100 text-green-800' 
                           : 'bg-red-100 text-red-800'
                       }`}
                     >

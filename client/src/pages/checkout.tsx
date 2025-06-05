@@ -45,7 +45,7 @@ export default function Checkout() {
 
   // Fetch available discounts
   const { data: availableDiscounts = [], isLoading: discountsLoading } = useQuery({
-    queryKey: [`${import.meta.env.VITE_API_URL}/api/discounts/active`],
+    queryKey: ['/api/discounts/active'],
   });
 
   // Type assertion for availableDiscounts
@@ -76,7 +76,7 @@ export default function Checkout() {
     setDiscountError("");
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/discounts/validate`, {
+      const response = await fetch('/api/discounts/validate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -121,7 +121,7 @@ export default function Checkout() {
       applyDiscount(discountId);
     }
   };
-
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -140,7 +140,7 @@ export default function Checkout() {
       notes: ""
     }
   });
-
+  
   // If cart is empty, redirect to products page
   if (cartItems.length === 0 && !orderComplete) {
     return (
@@ -153,10 +153,10 @@ export default function Checkout() {
       </div>
     );
   }
-
+  
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
-
+    
     try {
       // Create the order data
       const orderData = {
@@ -166,7 +166,7 @@ export default function Checkout() {
         shipping,
         total
       };
-
+      
       if (values.paymentMethod === "razorpay") {
         // Redirect to Razorpay payment page
         setLocation(`/payment?amount=${total}&currency=INR&description=Purchase from Farm to Table`);
@@ -175,13 +175,13 @@ export default function Checkout() {
         // Process Cash on Delivery order
         // Simulate order processing delay
         await new Promise(resolve => setTimeout(resolve, 1500));
-
+        
         // Clear cart after successful order
         await clearCart();
-
+        
         // Show success state
         setOrderComplete(true);
-
+        
         // Scroll to top
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
@@ -195,7 +195,7 @@ export default function Checkout() {
       setIsSubmitting(false);
     }
   };
-
+  
   // Order confirmation screen
   if (orderComplete) {
     return (
@@ -226,7 +226,7 @@ export default function Checkout() {
       </div>
     );
   }
-
+  
   return (
     <div className="bg-background py-32">
       <div className="container mx-auto px-4">
@@ -236,9 +236,9 @@ export default function Checkout() {
             Continue Shopping
           </Button>
         </Link>
-
+        
         <h1 className="text-3xl font-heading font-bold text-forest mb-10">Checkout</h1>
-
+        
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           {/* Checkout Form */}
           <div className="lg:col-span-2">
@@ -302,7 +302,7 @@ export default function Checkout() {
                     />
                   </div>
                 </div>
-
+                
                 {/* Shipping Information */}
                 <div className="bg-white p-6 rounded-lg shadow-sm">
                   <h2 className="text-xl font-heading font-semibold text-forest mb-6">Shipping Address</h2>
@@ -363,7 +363,7 @@ export default function Checkout() {
                     </div>
                   </div>
                 </div>
-
+                
                 {/* Payment Information */}
                 <div className="bg-white p-6 rounded-lg shadow-sm">
                   <h2 className="text-xl font-heading font-semibold text-forest mb-6">Payment Method</h2>
@@ -398,7 +398,7 @@ export default function Checkout() {
                       </FormItem>
                     )}
                   />
-
+                  
                   <AnimatePresence>
                     {form.watch("paymentMethod") === "razorpay" && (
                       <motion.div
@@ -430,7 +430,7 @@ export default function Checkout() {
                     )}
                   </AnimatePresence>
                 </div>
-
+                
                 {/* Additional Notes */}
                 <div className="bg-white p-6 rounded-lg shadow-sm">
                   <h2 className="text-xl font-heading font-semibold text-forest mb-6">Additional Notes</h2>
@@ -452,7 +452,7 @@ export default function Checkout() {
                     )}
                   />
                 </div>
-
+                
                 {/* Discount Selection Section */}
                 <div className="bg-white p-6 rounded-lg shadow-sm">
                   <h2 className="text-xl font-heading font-semibold text-forest mb-6">Apply Discount</h2>
@@ -491,11 +491,11 @@ export default function Checkout() {
                         </Button>
                       )}
                     </div>
-
+                    
                     {discountError && (
                       <p className="text-red-600 text-sm">{discountError}</p>
                     )}
-
+                    
                     {appliedDiscount && (
                       <div className="bg-green-50 border border-green-200 rounded-lg p-3">
                         <div className="flex items-center justify-between">
@@ -513,9 +513,9 @@ export default function Checkout() {
                     )}
                   </div>
                 </div>
-
-                <Button
-                  type="submit"
+                
+                <Button 
+                  type="submit" 
                   className="w-full bg-primary hover:bg-primary-dark text-white py-3 text-lg"
                   disabled={isSubmitting}
                 >
@@ -524,18 +524,18 @@ export default function Checkout() {
               </form>
             </Form>
           </div>
-
+          
           {/* Order Summary */}
           <div className="lg:col-span-1">
             <div className="bg-white p-6 rounded-lg shadow-sm sticky top-32">
               <h2 className="text-xl font-heading font-semibold text-forest mb-6">Order Summary</h2>
-
+              
               <div className="max-h-96 overflow-y-auto mb-6 pr-2">
                 {cartItems.map((item) => (
                   <div key={item.product.id} className="flex items-center py-3 border-b border-border/10">
-                    <img
-                      src={item.product.imageUrl}
-                      alt={item.product.name}
+                    <img 
+                      src={item.product.imageUrl} 
+                      alt={item.product.name} 
                       className="w-14 h-14 object-cover rounded-md mr-4"
                     />
                     <div className="flex-1">
@@ -550,7 +550,7 @@ export default function Checkout() {
                   </div>
                 ))}
               </div>
-
+              
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between text-foreground">
                   <span>Subtotal</span>
@@ -564,7 +564,7 @@ export default function Checkout() {
                     `₹${shipping.toFixed(2)}`
                   )}</span>
                 </div>
-
+                
                 {appliedDiscount && (
                   <div className="flex justify-between text-green-600">
                     <span>Discount ({appliedDiscount.code})</span>
@@ -575,14 +575,14 @@ export default function Checkout() {
                     </span>
                   </div>
                 )}
-
+                
                 <Separator className="my-2" />
                 <div className="flex justify-between text-lg font-semibold text-foreground">
                   <span>Total</span>
                   <span>₹{calculateTotal().toFixed(2)}</span>
                 </div>
               </div>
-
+              
               <div className="space-y-4 text-sm text-muted-foreground">
                 <div className="flex items-start">
                   <Truck className="h-5 w-5 mr-2 text-primary flex-shrink-0 mt-0.5" />

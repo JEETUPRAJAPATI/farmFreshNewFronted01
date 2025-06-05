@@ -82,16 +82,16 @@ export default function Account() {
       fetchSubscriptions();
     }
   }, [token, activeTab]);
-
+  
   // Fetch order history
   useEffect(() => {
     if (token && activeTab === 'orders') {
       fetchOrders();
     }
   }, [token, activeTab]);
+  
 
-
-
+  
   // Fetch delivered orders
   useEffect(() => {
     if (token && activeTab === 'delivered-orders') {
@@ -102,7 +102,7 @@ export default function Account() {
   const fetchPayments = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/payments/history`, {
+      const response = await fetch('/api/payments/history', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -125,7 +125,7 @@ export default function Account() {
   const fetchSubscriptions = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/subscriptions`, {
+      const response = await fetch('/api/subscriptions', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -144,11 +144,11 @@ export default function Account() {
       setIsLoading(false);
     }
   };
-
+  
   const fetchOrders = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/history`, {
+      const response = await fetch('/api/orders/history', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -167,11 +167,11 @@ export default function Account() {
       setIsLoading(false);
     }
   };
-
+  
   const fetchDeliveredOrders = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/delivered`, {
+      const response = await fetch('/api/orders/delivered', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -204,16 +204,16 @@ export default function Account() {
   const handleCancelSubscription = async (subscriptionId: number) => {
     try {
       setIsLoading(true);
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/subscriptions/${subscriptionId}/cancel`, {
+      const response = await fetch(`/api/subscriptions/${subscriptionId}/cancel`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
       });
-
+      
       const data = await response.json();
-
+      
       if (response.ok) {
         toast({
           title: 'Success',
@@ -249,24 +249,24 @@ export default function Account() {
       <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-8 max-w-6xl">
           <h1 className="text-3xl font-bold mb-8 text-foreground">My Account</h1>
-
+          
           <div className="mb-6">
-            <Button
-              onClick={() => navigate('/order-history')}
-              variant="outline"
+            <Button 
+              onClick={() => navigate('/order-history')} 
+              variant="outline" 
               className="mb-4"
             >
               View Order History
             </Button>
           </div>
-
+          
           <Tabs defaultValue="profile" value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="mb-8 w-full grid grid-cols-3">
               <TabsTrigger value="profile">Profile</TabsTrigger>
               <TabsTrigger value="delivered-orders">Delivered Orders</TabsTrigger>
               <TabsTrigger value="payments">Payment History</TabsTrigger>
             </TabsList>
-
+          
           <TabsContent value="profile">
             <Card>
               <CardHeader>
@@ -291,7 +291,7 @@ export default function Account() {
                         </FormItem>
                       )}
                     />
-
+                    
                     <div className="flex items-center gap-4">
                       <Button type="submit" disabled={isLoading}>
                         {isLoading ? 'Saving...' : 'Save Changes'}
@@ -305,7 +305,7 @@ export default function Account() {
               </CardContent>
             </Card>
           </TabsContent>
-
+          
           <TabsContent value="payments">
             <Card>
               <CardHeader>
@@ -362,7 +362,7 @@ export default function Account() {
               </CardContent>
             </Card>
           </TabsContent>
-
+          
           {/* Order History Tab */}
           <TabsContent value="orders">
             <Card>
@@ -447,7 +447,7 @@ export default function Account() {
                             <div>
                               <CardTitle className="text-lg">Order #{order.id}</CardTitle>
                               <CardDescription>
-                                Ordered: {new Date(order.createdAt).toLocaleDateString()} •
+                                Ordered: {new Date(order.createdAt).toLocaleDateString()} • 
                                 Delivered: {order.deliveredAt ? new Date(order.deliveredAt).toLocaleDateString() : 'N/A'}
                               </CardDescription>
                             </div>
@@ -476,8 +476,8 @@ export default function Account() {
                                       <span>Rated</span>
                                     </div>
                                   ) : item.canRate ? (
-                                    <Button
-                                      size="sm"
+                                    <Button 
+                                      size="sm" 
                                       variant="outline"
                                       onClick={() => setRatingModal({
                                         isOpen: true,
